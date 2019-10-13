@@ -1,0 +1,15 @@
+echo main begin
+    var fibonacci = echo(n) begin                           // Functions are first-class citizens in Reverb
+        if n do                                             // Reverb uses truthiness to decide whether non-boolean types are true or false
+            if n == 1 do
+                return 1                                    // Of course Reverb features return statements
+            end
+            return fibonacci(n - 1) + fibonacci(n - 2)      // Recursion works as expected in Reverb
+        end
+        return 0
+    end
+    var i = 10                                              // The var keyword is used to declare and assign variables
+    for i to 50 do                                          // For loop syntax is shorter when the iterator is predeclared
+        play(sine(fibonacci(i)))                            // Sine waves are a little more mathematical than other 'instruments'
+    end
+end
