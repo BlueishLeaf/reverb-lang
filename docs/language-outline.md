@@ -10,9 +10,12 @@ one to create music in a nuanced and novel way using code with an easy to learn 
 ## Features
 - Easily-Legible user-friendly syntax.
 - Case insensitive.
+- First-Class functions.
+- Truthiness.
 - Familiar data structures (integers, booleans, arrays, hashlists, etc).
+- Conditionals and loops.
 - A standard library supporting a variety of different instruments and chords.
-- Probably other stuff, idk.
+- Sine waves wub wub wub wub.
 ## Use Cases
 - General music composition (duh...)
 - Assistive tech (provide aural feedback to visually-impaired users)
