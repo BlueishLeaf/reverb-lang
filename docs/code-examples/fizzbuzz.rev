@@ -1,10 +1,10 @@
 echo main begin                             // Functions must be wrapped in a 'begin' and 'end' block
     for var i = 0 to 100 do                 // For loop syntax. If 'i' was already declared, this could be 'for i to 100 do'
-        if i % 3 == 0 and i % 5 == 0 do     // If statements are terminated with a single 'end' after their branches
+        if i % 3 == 0 and i % 5 == 0 then   // If statements are terminated with a single 'end' after their branches
             overlay(kick(), snare())        // Overlay is a builtin for playing multiple sounds simultaneously
-        else if i % 5 is 0 do               // Notice how 'is' can be substituted for '=='
+        else if i % 5 is 0 then             // Notice how 'is' can be substituted for '=='
             play(kick())                    // Play is a builtin for playing a number of instruments/chords sequentially
-        else if i % 3 == 0 do
+        else if i % 3 == 0 then
             play(snare())                   // Kick and Snare are builtins representing instruments
         else
             wait(1000)                      // Wait is a builtin for waiting a certain number of milliseconds

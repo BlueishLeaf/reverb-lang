@@ -1,7 +1,7 @@
 echo main begin
     var fibonacci = echo(n) begin                           // Functions are first-class citizens in Reverb
-        if n do                                             // Reverb uses truthiness to decide whether non-boolean types are true or false
-            if n == 1 do
+        if n then                                           // Reverb uses truthiness to decide whether non-boolean types are true or false
+            if n == 1 then
                 return 1                                    // Of course Reverb features return statements
             end
             return fibonacci(n - 1) + fibonacci(n - 2)      // Recursion works as expected in Reverb
