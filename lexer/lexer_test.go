@@ -6,7 +6,6 @@ import (
 )
 
 func TestNextToken(t *testing.T) {
-	// TODO: Test for-loop tokens
 	input := `var five = 5
 		var ten = 10
 		var add = echo(x, y) begin

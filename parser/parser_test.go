@@ -20,8 +20,8 @@ func checkParserErrors(t *testing.T, p *Parser) {
 }
 
 func testVarStatement(t *testing.T, s ast.Statement, name string) bool {
-	if s.TokenLiteral() != "let" {
-		t.Errorf("s.TokenLiteral not 'let'. got=%q", s.TokenLiteral())
+	if s.TokenLiteral() != "var" {
+		t.Errorf("s.TokenLiteral not 'var'. got=%q", s.TokenLiteral())
 		return false
 	}
 
@@ -141,8 +141,7 @@ func TestVarStatements(t *testing.T) {
 		checkParserErrors(t, p)
 
 		if len(program.Statements) != 1 {
-			t.Fatalf("program.Statements does not contain 1 statements. got=%d",
-				len(program.Statements))
+			t.Fatalf("program.Statements does not contain 1 statements. got=%d", len(program.Statements))
 		}
 
 		stmt := program.Statements[0]
@@ -162,9 +161,9 @@ func TestReturnStatements(t *testing.T) {
 		input         string
 		expectedValue interface{}
 	}{
-		{"return 5;", 5},
-		{"return true;", true},
-		{"return foobar;", "foobar"},
+		{"return 5", 5},
+		{"return true", true},
+		{"return foobar", "foobar"},
 	}
 
 	for _, tt := range tests {
@@ -174,8 +173,7 @@ func TestReturnStatements(t *testing.T) {
 		checkParserErrors(t, p)
 
 		if len(program.Statements) != 1 {
-			t.Fatalf("program.Statements does not contain 1 statements. got=%d",
-				len(program.Statements))
+			t.Fatalf("program.Statements does not contain 1 statements. got=%d", len(program.Statements))
 		}
 
 		stmt := program.Statements[0]
@@ -194,7 +192,7 @@ func TestReturnStatements(t *testing.T) {
 }
 
 func TestIdentifierExpression(t *testing.T) {
-	input := "foobar;"
+	input := "foobar"
 
 	l := lexer.New(input)
 	p := New(l)
@@ -222,7 +220,7 @@ func TestIdentifierExpression(t *testing.T) {
 }
 
 func TestIntegerLiteralExpression(t *testing.T) {
-	input := "5;"
+	input := "5"
 
 	l := lexer.New(input)
 	p := New(l)
@@ -248,12 +246,12 @@ func TestPrefixExpressions(t *testing.T) {
 		operator string
 		value    interface{}
 	}{
-		{"!5;", "!", 5},
-		{"-15;", "-", 15},
-		{"!foobar;", "!", "foobar"},
-		{"-foobar;", "-", "foobar"},
-		{"!true;", "!", true},
-		{"!false;", "!", false},
+		{"!5", "!", 5},
+		{"-15", "-", 15},
+		{"!foobar", "!", "foobar"},
+		{"-foobar", "-", "foobar"},
+		{"!true", "!", true},
+		{"!false", "!", false},
 	}
 
 	for _, tt := range tests {
@@ -290,22 +288,22 @@ func TestInfixExpressions(t *testing.T) {
 		operator   string
 		rightValue interface{}
 	}{
-		{"5 + 5;", 5, "+", 5},
-		{"5 - 5;", 5, "-", 5},
-		{"5 * 5;", 5, "*", 5},
-		{"5 / 5;", 5, "/", 5},
-		{"5 > 5;", 5, ">", 5},
-		{"5 < 5;", 5, "<", 5},
-		{"5 == 5;", 5, "==", 5},
-		{"5 != 5;", 5, "!=", 5},
-		{"foobar + barfoo;", "foobar", "+", "barfoo"},
-		{"foobar - barfoo;", "foobar", "-", "barfoo"},
-		{"foobar * barfoo;", "foobar", "*", "barfoo"},
-		{"foobar / barfoo;", "foobar", "/", "barfoo"},
-		{"foobar > barfoo;", "foobar", ">", "barfoo"},
-		{"foobar < barfoo;", "foobar", "<", "barfoo"},
-		{"foobar == barfoo;", "foobar", "==", "barfoo"},
-		{"foobar != barfoo;", "foobar", "!=", "barfoo"},
+		{"5 + 5", 5, "+", 5},
+		{"5 - 5", 5, "-", 5},
+		{"5 * 5", 5, "*", 5},
+		{"5 / 5", 5, "/", 5},
+		{"5 > 5", 5, ">", 5},
+		{"5 < 5", 5, "<", 5},
+		{"5 == 5", 5, "==", 5},
+		{"5 != 5", 5, "!=", 5},
+		{"foobar + barfoo", "foobar", "+", "barfoo"},
+		{"foobar - barfoo", "foobar", "-", "barfoo"},
+		{"foobar * barfoo", "foobar", "*", "barfoo"},
+		{"foobar / barfoo", "foobar", "/", "barfoo"},
+		{"foobar > barfoo", "foobar", ">", "barfoo"},
+		{"foobar < barfoo", "foobar", "<", "barfoo"},
+		{"foobar == barfoo", "foobar", "==", "barfoo"},
+		{"foobar != barfoo", "foobar", "!=", "barfoo"},
 		{"true == true", true, "==", true},
 		{"true != false", true, "!=", false},
 		{"false == false", false, "==", false},
@@ -369,7 +367,7 @@ func TestOperatorPrecedence(t *testing.T) {
 			"(((a + (b * c)) + (d / e)) - f)",
 		},
 		{
-			"3 + 4; -5 * 5",
+			"3 + 4\n -5 * 5",
 			"(3 + 4)((-5) * 5)",
 		},
 		{
@@ -464,8 +462,8 @@ func TestBooleanExpression(t *testing.T) {
 		input           string
 		expectedBoolean bool
 	}{
-		{"true;", true},
-		{"false;", false},
+		{"true", true},
+		{"false", false},
 	}
 
 	for _, tt := range tests {
@@ -494,7 +492,7 @@ func TestBooleanExpression(t *testing.T) {
 }
 
 func TestIfExpression(t *testing.T) {
-	input := `if (x < y) { x }`
+	input := "if x < y then x end"
 
 	l := lexer.New(input)
 	p := New(l)
@@ -543,7 +541,7 @@ func TestIfExpression(t *testing.T) {
 }
 
 func TestIfElseExpression(t *testing.T) {
-	input := `if (x < y) { x } else { y }`
+	input := "if x < y then x end else then y end"
 
 	l := lexer.New(input)
 	p := New(l)
@@ -602,7 +600,7 @@ func TestIfElseExpression(t *testing.T) {
 }
 
 func TestFunctionLiteralParsing(t *testing.T) {
-	input := `fn(x, y) { x + y; }`
+	input := `echo(x, y) begin x + y end`
 
 	l := lexer.New(input)
 	p := New(l)
@@ -653,9 +651,9 @@ func TestFunctionParameterParsing(t *testing.T) {
 		input          string
 		expectedParams []string
 	}{
-		{input: "fn() {};", expectedParams: []string{}},
-		{input: "fn(x) {};", expectedParams: []string{"x"}},
-		{input: "fn(x, y, z) {};", expectedParams: []string{"x", "y", "z"}},
+		{input: "echo() begin end", expectedParams: []string{}},
+		{input: "echo(x) begin end", expectedParams: []string{"x"}},
+		{input: "echo(x, y, z) begin end", expectedParams: []string{"x", "y", "z"}},
 	}
 
 	for _, tt := range tests {
@@ -679,7 +677,7 @@ func TestFunctionParameterParsing(t *testing.T) {
 }
 
 func TestCallExpressionParsing(t *testing.T) {
-	input := "add(1, 2 * 3, 4 + 5);"
+	input := "add(1, 2 * 3, 4 + 5)"
 
 	l := lexer.New(input)
 	p := New(l)
@@ -723,17 +721,17 @@ func TestCallExpressionParameterParsing(t *testing.T) {
 		expectedArgs  []string
 	}{
 		{
-			input:         "add();",
+			input:         "add()",
 			expectedIdent: "add",
 			expectedArgs:  []string{},
 		},
 		{
-			input:         "add(1);",
+			input:         "add(1)",
 			expectedIdent: "add",
 			expectedArgs:  []string{"1"},
 		},
 		{
-			input:         "add(1, 2 * 3, 4 + 5);",
+			input:         "add(1, 2 * 3, 4 + 5)",
 			expectedIdent: "add",
 			expectedArgs:  []string{"1", "(2 * 3)", "(4 + 5)"},
 		},

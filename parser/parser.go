@@ -108,7 +108,7 @@ func (p *Parser) parseVarStatement() *ast.VarStatement {
 	}
 	p.nextToken()
 	stmt.Value = p.parseExpression(LOWEST)
-	if p.peekTokenIs(token.NEWLINE) {
+	if p.peekTokenIs(token.NEWLINE) || p.peekTokenIs(token.EOF) {
 		p.nextToken()
 	}
 	return stmt
@@ -120,7 +120,7 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	}
 	p.nextToken()
 	stmt.ReturnValue = p.parseExpression(LOWEST)
-	if p.peekTokenIs(token.NEWLINE) {
+	if p.peekTokenIs(token.NEWLINE) || p.peekTokenIs(token.EOF) {
 		p.nextToken()
 	}
 	return stmt
@@ -134,8 +134,8 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 	}
 	leftExp := prefix()
 
-	// TODO: Confirm this
-	for !p.peekTokenIs(token.NEWLINE) && precedence < p.peekPrecedence() {
+	// Because an if expression's condition doesnt terminate, we try to pick up on 'then' here too
+	for (!p.peekTokenIs(token.NEWLINE) || !p.peekTokenIs(token.EOF) || !p.peekTokenIs(token.THEN)) && precedence < p.peekPrecedence() {
 		infix := p.infixParseFns[p.peekToken.Type]
 		if infix == nil {
 			return leftExp
@@ -152,7 +152,7 @@ func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	}
 	stmt.Expression = p.parseExpression(LOWEST)
 
-	if p.peekTokenIs(token.NEWLINE) {
+	if p.peekTokenIs(token.NEWLINE) || p.peekTokenIs(token.EOF) {
 		p.nextToken()
 	}
 	return stmt
@@ -259,7 +259,7 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 	block.Statements = []ast.Statement{}
 	p.nextToken()
 	// TODO: Confirm that this works
-	for !p.curTokenIs(token.BEGIN) && !p.curTokenIs(token.EOF) {
+	for !p.curTokenIs(token.END) && !p.curTokenIs(token.EOF) {
 		stmt := p.parseStatement()
 		if stmt != nil {
 			block.Statements = append(block.Statements, stmt)
@@ -270,24 +270,23 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 }
 
 func (p *Parser) parseIfExpression() ast.Expression {
+	// TODO: Support only having one 'end' keyword
 	expression := &ast.IfExpression{
 		Token: p.curToken,
 	}
-	if !p.expectPeek(token.LPAREN) {
+	if p.peekTokenIs(token.THEN) {
 		return nil
 	}
 	p.nextToken()
 	expression.Condition = p.parseExpression(LOWEST)
-	if !p.expectPeek(token.RPAREN) {
-		return nil
-	}
-	if !p.expectPeek(token.LBRACE) {
+	if !p.expectPeek(token.THEN) {
 		return nil
 	}
 	expression.Consequence = p.parseBlockStatement()
 	if p.peekTokenIs(token.ELSE) {
+		// TODO: For IF ELSE, insert a switch statement here and recurse this function on an 'if'. Will need special parse block function.
 		p.nextToken()
-		if !p.expectPeek(token.LBRACE) {
+		if !p.expectPeek(token.THEN) {
 			return nil
 		}
 		expression.Alternative = p.parseBlockStatement()
@@ -326,11 +325,12 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 	lit := &ast.FunctionLiteral{
 		Token: p.curToken,
 	}
+	// TODO: Need to also support standalone functions
 	if !p.expectPeek(token.LPAREN) {
 		return nil
 	}
 	lit.Parameters = p.parseFunctionParameters()
-	if !p.expectPeek(token.LBRACE) {
+	if !p.expectPeek(token.BEGIN) {
 		return nil
 	}
 	lit.Body = p.parseBlockStatement()
@@ -405,7 +405,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.IF, p.parseIfExpression)
 	p.registerPrefix(token.FUNCTION, p.parseFunctionLiteral)
 	p.registerPrefix(token.LBRACKET, p.parseArrayLiteral)
-	p.registerPrefix(token.LBRACE, p.parseHashLiteral)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
