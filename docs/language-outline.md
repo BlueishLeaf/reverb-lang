@@ -14,10 +14,10 @@ one to create music in a nuanced and novel way using code with an easy to learn 
 - Truthiness.
 - Familiar data structures (integers, booleans, arrays, hashlists, etc).
 - Conditionals and loops.
+- Synthesizer.
 - A standard library supporting a variety of different instruments and chords.
-- Sine waves wub wub wub wub.
 ## Use Cases
-- General music composition (duh...)
-- Assistive tech (provide aural feedback to visually-impaired users)
 - Educational tech (easy to learn and provides novel feedback)
+- Assistive tech (provide aural feedback to visually-impaired users)
+- General music composition (duh...)
 - Game development (dynamic music composition for soundtracks or sfx)
