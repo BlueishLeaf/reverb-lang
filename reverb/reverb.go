@@ -1,4 +1,4 @@
-package cli
+package main
 
 import (
 	"bufio"
@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func Start() {
+func main() {
 	app := &cli.App{
 		Name:     "Reverb CLi",
 		Usage:    "Provides tools for use with the Reverb programming language.",
@@ -30,19 +30,13 @@ func Start() {
 		},
 		Commands: []*cli.Command{
 			{
-				Name:  "reverb",
-				Usage: "Compiles or interprets a reverb file.",
-				Action: func(context *cli.Context) error {
-					numArgs := context.Args().Len()
+				Name:  "run",
+				Usage: "Interprets a specified reverb file",
+				Action: func(ctx *cli.Context) error {
+					numArgs := ctx.Args().Len()
 					var fileName string
-					var flag string
-					if numArgs == 0 {
-						// Open REPL
-						fmt.Printf("Welcome to the Reverb REPL. Press Ctrl + D to exit.\n")
-						repl.Start(os.Stdin, os.Stdout)
-					} else if numArgs == 1 {
-						// Interpret Reverb fileName
-						fileName = context.Args().Get(0)
+					if numArgs == 1 {
+						fileName = ctx.Args().Get(0)
 						file, err := os.Open(fileName)
 						if err != nil {
 							log.Fatal(err)
@@ -64,15 +58,26 @@ func Start() {
 							_, _ = io.WriteString(os.Stdout, evaluated.Inspect())
 							_, _ = io.WriteString(os.Stdout, "\n")
 						}
-					} else if numArgs == 2 {
-						// Compile Reverb fileName to mp3
-						fileName = context.Args().Get(0)
-						flag = context.Args().Get(1)
-						fmt.Println(fileName)
-						fmt.Println(flag)
 					} else {
 						fmt.Println("Invalid number of arguments. Try again.")
 					}
+					return nil
+				},
+			},
+			{
+				Name: "compile",
+				Usage: "Compiles a specified reverb file to MP3 format",
+				Action: func(ctx *cli.Context) error {
+					// TODO: This...
+					return nil
+				},
+			},
+			{
+				Name: "repl",
+				Usage: "Initiates the reverb REPL environment",
+				Action: func(ctx *cli.Context) error {
+					fmt.Printf("Welcome to the Reverb REPL. Press Ctrl + D to exit.\n")
+					repl.Start(os.Stdin, os.Stdout)
 					return nil
 				},
 			},
