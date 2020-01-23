@@ -72,8 +72,15 @@ func (l *Lexer) NextToken() token.Token {
 			tok.Type = token.LookupIndent(tok.Literal)
 			return tok
 		} else if isDigit(l.ch) {
-			tok.Type = token.INT
-			tok.Literal = l.readNumber()
+			number := l.readNumber() // read the first grouping of digits
+			if l.peekChar() == '.' {
+				l.readChar() // skip over the period
+				tok.Type = token.FLOAT
+				tok.Literal = number + "." + l.readNumber()
+			} else {
+				tok.Type = token.INT
+				tok.Literal = number
+			}
 			return tok
 		} else {
 			tok = newToken(token.ILLEGAL, l.ch)

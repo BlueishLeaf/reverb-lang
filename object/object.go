@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/BlueishLeaf/reverb-lang/ast"
+	"github.com/hajimehoshi/oto"
 	"strings"
 )
 
@@ -11,14 +12,18 @@ type Type string
 
 type BuiltinFunction func(args ...Object) Object
 
+type SynthesisFunction func(ctx *oto.Context, args ...Object) Object
+
 const (
 	INTEGER_OBJ      = "INTEGER"
+	FLOAT_OBJ		 = "FLOAT"
 	BOOLEAN_OBJ      = "BOOLEAN"
 	NULL_OBJ         = "NULL"
 	RETURN_VALUE_OBJ = "RETURN_VALUE"
 	ERROR_OBJ        = "ERROR"
 	FUNCTION_OBJ     = "FUNCTION"
 	BUILTIN_OBJ      = "BUILTIN"
+	SYNTHESIS_OBJ	 = "SYNTHESIS"
 	ARRAY_OBJ = "ARRAY"
 )
 
@@ -37,6 +42,18 @@ func (i *Integer) Type() Type {
 
 func (i *Integer) Inspect() string {
 	return fmt.Sprintf("%d", i.Value)
+}
+
+type Float struct {
+	Value float64
+}
+
+func (f *Float) Type() Type {
+	return FLOAT_OBJ
+}
+
+func (f *Float) Inspect() string {
+	return fmt.Sprintf("%f", f.Value)
 }
 
 type Boolean struct {
@@ -121,6 +138,18 @@ func (b *Builtin) Type() Type {
 
 func (b *Builtin) Inspect() string {
 	return "builtin function"
+}
+
+type Synthesis struct {
+	Fn SynthesisFunction
+}
+
+func (s *Synthesis) Type() Type {
+	return SYNTHESIS_OBJ
+}
+
+func (s *Synthesis) Inspect() string {
+	return "synthesis function"
 }
 
 type Array struct {

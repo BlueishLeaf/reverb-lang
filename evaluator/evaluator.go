@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/BlueishLeaf/reverb-lang/ast"
 	"github.com/BlueishLeaf/reverb-lang/object"
+	"github.com/hajimehoshi/oto"
 )
 
 var (
@@ -162,6 +163,8 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 	}
 	if builtin, ok := builtins[node.Value]; ok {
 		return builtin
+	} else if synthesis, ok := synthesises[node.Value]; ok {
+		return synthesis
 	}
 	return newError("identifier not found: " + node.Value)
 }
@@ -193,7 +196,7 @@ func unwrapReturnValue(obj object.Object) object.Object {
 	return obj
 }
 
-func applyFunction(fn object.Object, args []object.Object) object.Object {
+func applyFunction(fn object.Object, args []object.Object, ctx *oto.Context) object.Object {
 	switch fn := fn.(type) {
 	case *object.Function:
 		extendedEnv := extendFunctionEnv(fn, args)
@@ -201,6 +204,8 @@ func applyFunction(fn object.Object, args []object.Object) object.Object {
 		return unwrapReturnValue(evaluated)
 	case *object.Builtin:
 		return fn.Fn(args...)
+	case *object.Synthesis:
+		return fn.Fn(ctx, args...)
 	default:
 		return newError("not a function: %s", fn.Type())
 	}
@@ -286,7 +291,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if len(args) == 1 && isError(args[0]) {
 			return args[0]
 		}
-		return applyFunction(function, args)
+		return applyFunction(function, args, env.GetContext())
 	case *ast.ArrayLiteral:
 		elements := evalExpressions(node.Elements, env)
 		if len(elements) == 1 && isError(elements[0]) {
