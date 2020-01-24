@@ -14,14 +14,20 @@ var synthesises = map[string]*object.Synthesis{
 		if len(args) != 2 {
 			return newError("wrong number of arguments. got=%d, want=%d", len(args), 2)
 		}
-		if args[0].Type() != object.INTEGER_OBJ {
-			return newError("argument to `push` must be INTEGER_OBJ, got %s", args[0].Type())
+		if args[0].Type() != object.FLOAT_OBJ {
+			return newError("argument to `push` must be FLOAT_OBJ, got %s", args[0].Type())
 		}
 		freq := args[0].(*object.Float)
 		duration := args[1].(*object.Integer)
-		if err := synth.Play(ctx, freq.Value, duration.Value * 1000); err != nil {
-			panic(err)
-		}
+		//var wg sync.WaitGroup
+		//wg.Add(1)
+		go func() {
+			//defer wg.Done()
+			if err := synth.Play(ctx, freq.Value, duration.Value * 1000); err != nil {
+				panic(err)
+			}
+		}()
+		//wg.Wait()
 		return NULL
 	}},
 }

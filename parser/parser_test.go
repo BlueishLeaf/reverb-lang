@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/BlueishLeaf/reverb-lang/ast"
 	"github.com/BlueishLeaf/reverb-lang/lexer"
+	"strconv"
 	"testing"
 )
 
@@ -51,6 +52,24 @@ func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
 	}
 	if literal.TokenLiteral() != fmt.Sprintf("%d", value) {
 		t.Errorf("literal.TokenLiteral not %d. got=%s", value, literal.TokenLiteral())
+		return false
+	}
+	return true
+}
+
+func testFloatLiteral(t *testing.T, fl ast.Expression, value float64) bool {
+	literal, ok := fl.(*ast.FloatLiteral)
+	if !ok {
+		t.Fatalf("fl not *ast.FloatLiteral. got=%T", fl)
+		return false
+	}
+	if literal.Value != value {
+		t.Errorf("literal.Value not %f. got=%f", value, literal.Value)
+		return false
+	}
+	stringVal := strconv.FormatFloat(value, 'f', -1, 64)
+	if literal.TokenLiteral() != stringVal {
+		t.Errorf("literal.TokenLiteral not %s. got=%s", stringVal, literal.TokenLiteral())
 		return false
 	}
 	return true
@@ -236,6 +255,27 @@ func TestIntegerLiteralExpression(t *testing.T) {
 	}
 
 	if !testIntegerLiteral(t, stmt.Expression, 5) {
+		return
+	}
+}
+
+func TestFloatLiteralExpression(t *testing.T) {
+	input := "5.56"
+
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("program has incorrect number of statements. got=%d", len(program.Statements))
+	}
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T", program.Statements[0])
+	}
+
+	if !testFloatLiteral(t, stmt.Expression, 5.56) {
 		return
 	}
 }

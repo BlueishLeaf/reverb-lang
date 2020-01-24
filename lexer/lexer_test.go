@@ -6,9 +6,8 @@ import (
 )
 
 func TestNextToken(t *testing.T) {
-	input := `var five = 5
+	input := `var five = 5.56
 		var ten = 10
-		5.56
 		var add = echo(x, y) begin
 			x + y
 		end
@@ -39,8 +38,6 @@ func TestNextToken(t *testing.T) {
 		{token.VAR, "var"},
 		{token.IDENT, "five"},
 		{token.ASSIGN, "="},
-		{token.INT, "5"},
-		{token.NEWLINE, "\n"},
 		{token.FLOAT, "5.56"},
 		{token.NEWLINE, "\n"},
 		{token.VAR, "var"},

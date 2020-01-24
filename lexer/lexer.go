@@ -73,7 +73,7 @@ func (l *Lexer) NextToken() token.Token {
 			return tok
 		} else if isDigit(l.ch) {
 			number := l.readNumber() // read the first grouping of digits
-			if l.peekChar() == '.' {
+			if l.ch == '.' {
 				l.readChar() // skip over the period
 				tok.Type = token.FLOAT
 				tok.Literal = number + "." + l.readNumber()

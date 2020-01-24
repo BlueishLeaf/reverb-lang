@@ -28,6 +28,19 @@ func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
 	return true
 }
 
+func testFloatObject(t *testing.T, obj object.Object, expected float64) bool {
+	result, ok := obj.(*object.Float)
+	if !ok {
+		t.Errorf("object is not Float, got=%T (%+v)", obj, obj)
+		return false
+	}
+	if result.Value != expected {
+		t.Errorf("object has wrong value. got=%f, expected=%f", result.Value, expected)
+		return false
+	}
+	return true
+}
+
 func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
 	result, ok := obj.(*object.Boolean)
 	if !ok {
@@ -73,6 +86,26 @@ func TestEvalIntegerExpression(t *testing.T) {
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
 		testIntegerObject(t, evaluated, tt.expected)
+	}
+}
+
+func TestEvalFloatExpression(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected float64
+	}{
+		{"5.56", 5.56},
+		{"10.104", 10.104},
+		{"-5.56", -5.56},
+		{"-10.104", -10.104},
+		{"5.2 + 5.2 + 5.2 + 5.2 + 5.2 - 10", 16},
+		{"2.1 * 2.69 * 2.44 * 2.22 * 2.1", 64.25895672},
+		{"-50.5 + 100.5 + -50.5", -0.5},
+		{"5.5 * 2 + 10", 21},
+	}
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testFloatObject(t, evaluated, tt.expected)
 	}
 }
 
