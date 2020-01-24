@@ -4,7 +4,10 @@ import (
 	"github.com/BlueishLeaf/reverb-lang/object"
 	"github.com/BlueishLeaf/reverb-lang/synth"
 	"github.com/hajimehoshi/oto"
+	"sync"
 )
+
+//var queue = make()
 
 var synthesises = map[string]*object.Synthesis{
 	"sine": {Fn: func(ctx *oto.Context, args ...object.Object) object.Object {
@@ -19,15 +22,16 @@ var synthesises = map[string]*object.Synthesis{
 		}
 		freq := args[0].(*object.Float)
 		duration := args[1].(*object.Integer)
-		//var wg sync.WaitGroup
-		//wg.Add(1)
+		// TODO: Create a new sine wave and add it to the global queue
+		var wg sync.WaitGroup
+		wg.Add(1)
 		go func() {
-			//defer wg.Done()
+			defer wg.Done()
 			if err := synth.Play(ctx, freq.Value, duration.Value * 1000); err != nil {
 				panic(err)
 			}
 		}()
-		//wg.Wait()
+		wg.Wait()
 		return NULL
 	}},
 }

@@ -6,11 +6,21 @@ import (
 	"math"
 )
 
+// The first 3 constants are for all waveforms, not just sine waves
 const (
-	sampleRate      = 44100
+	sampleRate      = 48000
 	channelNum      = 2
 	bitDepthInBytes = 2
+	SINE			= "SINE"
+	SQUARE			= "SQUARE"
+	TRIANGLE		= "TRIANGLE"
 )
+
+// type Type string
+
+//type Wave interface {
+//	Type()
+//}
 
 type SineWave struct {
 	freq      float64
@@ -19,54 +29,44 @@ type SineWave struct {
 	remaining []byte
 }
 
-func Play(context *oto.Context, freq float64, duration int64) error {
-	p := context.NewPlayer()
-	s := newSineWave(freq, duration)
-	if _, err := io.Copy(p, s); err != nil {
-		return err
-	}
-	if err := p.Close(); err != nil {
-		return err
-	}
-	return nil
-}
+//func (siw *SineWave) Type() Type {
+//	return SINE
+//}
 
-func newSineWave(freq float64, duration int64) *SineWave {
-	l := channelNum * bitDepthInBytes * sampleRate * duration / 1000
-	l = l / 4 * 4
-	return &SineWave{
-		freq:   freq,
-		length: l,
-	}
-}
-
-func (s *SineWave) Read(buf []byte) (int, error) {
-	if len(s.remaining) > 0 {
-		n := copy(buf, s.remaining)
-		s.remaining = s.remaining[n:]
+func (siw *SineWave) Read(buf []byte) (int, error) {
+	// Copy the remaining bytes of the sine wave to the io buffer
+	if len(siw.remaining) > 0 {
+		n := copy(buf, siw.remaining)
+		siw.remaining = siw.remaining[n:]
 		return n, nil
 	}
 
-	if s.pos == s.length {
+	// End the read if all of the sine wave is read
+	if siw.pos == siw.length {
 		return 0, io.EOF
 	}
 
+	// Set flag for EOF if this is the final call to Read by calculating the predicted buffer length
 	eof := false
-	if s.pos+int64(len(buf)) > s.length {
-		buf = buf[:s.length-s.pos]
+	if siw.pos+int64(len(buf)) > siw.length {
+		buf = buf[:siw.length-siw.pos]
 		eof = true
 	}
 
+	// Keep a copy of the original buffer
+	// Modify buf
 	var origBuf []byte
 	if len(buf)%4 > 0 {
 		origBuf = buf
 		buf = make([]byte, len(origBuf)+4-len(origBuf)%4)
 	}
 
-	length := sampleRate / s.freq
-
+	// Calculate the length of the sine wave and the new position in the buffer
+	length := sampleRate / siw.freq
 	num := bitDepthInBytes * channelNum
-	p := s.pos / int64(num)
+	p := siw.pos / int64(num)
+
+	// TODO: See if there is any benefit to using 1 bit depth, otherwise yeet the switch statement
 	switch bitDepthInBytes {
 	case 1:
 		for i := 0; i < len(buf)/num; i++ {
@@ -89,16 +89,64 @@ func (s *SineWave) Read(buf []byte) (int, error) {
 		}
 	}
 
-	s.pos += int64(len(buf))
+	// increment the buffer position
+	siw.pos += int64(len(buf))
 
+	// Copy over the original buffer and update the remaining bytes
 	n := len(buf)
 	if origBuf != nil {
 		n = copy(origBuf, buf)
-		s.remaining = buf[n:]
+		siw.remaining = buf[n:]
 	}
 
+	// End the read altogether if the EOF flag was set
 	if eof {
 		return n, io.EOF
 	}
 	return n, nil
+}
+
+func NewSineWave(freq float64, duration int64) *SineWave {
+	l := channelNum * bitDepthInBytes * sampleRate * duration / 1000
+	l = l / 4 * 4
+	return &SineWave{
+		freq:   freq,
+		length: l,
+	}
+}
+
+//type SquareWave struct {
+//
+//}
+//
+//func (sqw *SquareWave) Type() Type {
+//	return SQUARE
+//}
+
+//func NewSquareWave(freq float64, duration int64) *SquareWave {
+//
+//}
+
+//type TriangleWave struct {
+//
+//}
+//
+//func (tw *TriangleWave) Type() Type {
+//	return TRIANGLE
+//}
+
+//func NewTriangleWave(freq float64, duration int64) *TriangleWave {
+//
+//}
+
+func Play(context *oto.Context, freq float64, duration int64) error {
+	p := context.NewPlayer()
+	s := NewSineWave(freq, duration)
+	if _, err := io.Copy(p, s); err != nil {
+		return err
+	}
+	if err := p.Close(); err != nil {
+		return err
+	}
+	return nil
 }
