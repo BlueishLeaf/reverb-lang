@@ -1,19 +1,22 @@
 var fibonacci = echo(n) begin
-    if n <= 1 then
-        return n
+    if n == 1 then
+        return 0
+    end
+    else if n == 2 then
+        return 1
+    end
     else then
         return fibonacci(n - 1) + fibonacci(n - 2)
     end
 end
 
-puts(fibonacci(0)
-puts(fibonacci(1))
-puts(fibonacci(2))
-puts(fibonacci(3))
-puts(fibonacci(4))
-puts(fibonacci(5))
-puts(fibonacci(6))
-puts(fibonacci(7))
-puts(fibonacci(8))
-puts(fibonacci(9))
+put(fibonacci(1))
+put(fibonacci(2))
+put(fibonacci(3))
+put(fibonacci(4))
+put(fibonacci(5))
+put(fibonacci(6))
+put(fibonacci(7))
+put(fibonacci(8))
+put(fibonacci(9))
 fibonacci(10)

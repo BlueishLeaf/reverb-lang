@@ -1,5 +1,7 @@
 var fibonacci = echo(n) begin
-    if n <= 1 then
+    if !n then
+        return 0
+    else if n <= 1 then
         return n
     else then
         return fibonacci(n - 1) + fibonacci(n - 2)

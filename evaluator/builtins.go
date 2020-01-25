@@ -17,7 +17,7 @@ var builtins = map[string]*object.Builtin{
 			return newError("argument to `len` not supported, got %s", args[0].Type())
 		}
 	}},
-	"puts": {
+	"print": {
 		Fn: func(args ...object.Object) object.Object {
 			for _, arg := range args {
 				fmt.Println(arg.Inspect())

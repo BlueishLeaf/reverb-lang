@@ -21,3 +21,8 @@ one to create music in a nuanced and novel way using code with an easy to learn 
 - Assistive tech (provide aural feedback to visually-impaired users)
 - General music composition (duh...)
 - Game development (dynamic music composition for soundtracks or sfx)
+## TODO
+- Loops
+- Improve syntax for if statements (reduce number of 'end's required)
+- Improve syntax for functions ()
+- Comments

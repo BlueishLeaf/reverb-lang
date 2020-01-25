@@ -6,21 +6,11 @@ import (
 	"math"
 )
 
-// The first 3 constants are for all waveforms, not just sine waves
 const (
 	sampleRate      = 48000
 	channelNum      = 2
 	bitDepthInBytes = 2
-	SINE			= "SINE"
-	SQUARE			= "SQUARE"
-	TRIANGLE		= "TRIANGLE"
 )
-
-// type Type string
-
-//type Wave interface {
-//	Type()
-//}
 
 type SineWave struct {
 	freq      float64
@@ -28,10 +18,6 @@ type SineWave struct {
 	pos       int64
 	remaining []byte
 }
-
-//func (siw *SineWave) Type() Type {
-//	return SINE
-//}
 
 func (siw *SineWave) Read(buf []byte) (int, error) {
 	// Copy the remaining bytes of the sine wave to the io buffer
@@ -106,6 +92,7 @@ func (siw *SineWave) Read(buf []byte) (int, error) {
 	return n, nil
 }
 
+// Formula for sine wave: Asin(fx)*A
 func NewSineWave(freq float64, duration int64) *SineWave {
 	l := channelNum * bitDepthInBytes * sampleRate * duration / 1000
 	l = l / 4 * 4
@@ -114,30 +101,6 @@ func NewSineWave(freq float64, duration int64) *SineWave {
 		length: l,
 	}
 }
-
-//type SquareWave struct {
-//
-//}
-//
-//func (sqw *SquareWave) Type() Type {
-//	return SQUARE
-//}
-
-//func NewSquareWave(freq float64, duration int64) *SquareWave {
-//
-//}
-
-//type TriangleWave struct {
-//
-//}
-//
-//func (tw *TriangleWave) Type() Type {
-//	return TRIANGLE
-//}
-
-//func NewTriangleWave(freq float64, duration int64) *TriangleWave {
-//
-//}
 
 func Play(context *oto.Context, freq float64, duration int64) error {
 	p := context.NewPlayer()
