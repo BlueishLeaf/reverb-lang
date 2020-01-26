@@ -65,7 +65,7 @@ func main() {
 				},
 			},
 			{
-				Name: "compile",
+				Name:  "compile",
 				Usage: "Compiles a specified reverb file to MP3 format",
 				Action: func(ctx *cli.Context) error {
 					// TODO: This...
@@ -73,7 +73,7 @@ func main() {
 				},
 			},
 			{
-				Name: "repl",
+				Name:  "repl",
 				Usage: "Initiates the reverb REPL environment",
 				Action: func(ctx *cli.Context) error {
 					fmt.Printf("Welcome to the Reverb REPL. Press Ctrl + D to exit.\n")

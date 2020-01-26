@@ -384,7 +384,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if len(elements) == 1 && isError(elements[0]) {
 			return elements[0]
 		}
-		return &object.Array{Elements:elements}
+		return &object.Array{Elements: elements}
 	case *ast.IndexExpression:
 		left := Eval(node.Left, env)
 		if isError(left) {

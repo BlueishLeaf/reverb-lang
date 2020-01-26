@@ -22,7 +22,7 @@ one to create music in a nuanced and novel way using code with an easy to learn 
 - General music composition (duh...)
 - Game development (dynamic music composition for soundtracks or sfx)
 ## TODO
-- Loops
+- Loops (For and While)
 - Improve syntax for if statements (reduce number of 'end's required)
-- Improve syntax for functions ()
-- Comments
+- Improve syntax for functions (call them something other than 'echoes')
+- Comments (python-like comments '#')

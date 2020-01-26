@@ -20,7 +20,7 @@ const (
 	EQ       = "=="
 	NOT_EQ   = "!="
 	// Delimiters
-	NEWLINE  = "\n" // TODO: May need to also add carriage return '\r' for windows compatibility
+	NEWLINE  = "\n"
 	COMMA    = ","
 	LPAREN   = "("
 	RPAREN   = ")"
@@ -30,9 +30,6 @@ const (
 	BEGIN    = "BEGIN"
 	END      = "END"
 	THEN     = "THEN"
-	DO       = "DO"
-	FOR      = "FOR"
-	TO       = "TO"
 	FUNCTION = "FUNCTION"
 	VAR      = "VAR"
 	TRUE     = "TRUE"
@@ -40,6 +37,8 @@ const (
 	IF       = "IF"
 	ELSE     = "ELSE"
 	RETURN   = "RETURN"
+	// Other
+	COMMENT	 = "COMMENT"
 )
 
 type TokenType string
@@ -58,11 +57,8 @@ var keywords = map[string]TokenType{
 	"true":   TRUE,
 	"false":  FALSE,
 	"if":     IF,
-	"then": THEN,
+	"then":   THEN,
 	"else":   ELSE,
-	"do":     DO,
-	"for":    FOR,
-	"to":     TO,
 	"return": RETURN,
 }
 

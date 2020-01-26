@@ -26,10 +26,7 @@ func TestNextToken(t *testing.T) {
 		end
 		10 == 10
 		10 != 9
-		[1, 2]
-		for var i = 10 to 100 do
-			i = i + 10
-		end`
+		[1, 2]`
 
 	tests := []struct {
 		expectedType    token.TokenType
@@ -139,23 +136,6 @@ func TestNextToken(t *testing.T) {
 		{token.COMMA, ","},
 		{token.INT, "2"},
 		{token.RBRACKET, "]"},
-		{token.NEWLINE, "\n"},
-		{token.FOR, "for"},
-		{token.VAR, "var"},
-		{token.IDENT, "i"},
-		{token.ASSIGN, "="},
-		{token.INT, "10"},
-		{token.TO, "to"},
-		{token.INT, "100"},
-		{token.DO, "do"},
-		{token.NEWLINE, "\n"},
-		{token.IDENT, "i"},
-		{token.ASSIGN, "="},
-		{token.IDENT, "i"},
-		{token.PLUS, "+"},
-		{token.INT, "10"},
-		{token.NEWLINE, "\n"},
-		{token.END, "end"},
 		{token.EOF, ""},
 	}
 

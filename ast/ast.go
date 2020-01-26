@@ -329,7 +329,7 @@ func (ce *CallExpression) String() string {
 }
 
 type ArrayLiteral struct {
-	Token token.Token
+	Token    token.Token
 	Elements []Expression
 }
 
@@ -355,7 +355,7 @@ func (al *ArrayLiteral) String() string {
 
 type IndexExpression struct {
 	Token token.Token
-	Left Expression
+	Left  Expression
 	Index Expression
 }
 

@@ -16,15 +16,15 @@ type SynthesisFunction func(ctx *oto.Context, args ...Object) Object
 
 const (
 	INTEGER_OBJ      = "INTEGER"
-	FLOAT_OBJ		 = "FLOAT"
+	FLOAT_OBJ        = "FLOAT"
 	BOOLEAN_OBJ      = "BOOLEAN"
 	NULL_OBJ         = "NULL"
 	RETURN_VALUE_OBJ = "RETURN_VALUE"
 	ERROR_OBJ        = "ERROR"
 	FUNCTION_OBJ     = "FUNCTION"
 	BUILTIN_OBJ      = "BUILTIN"
-	SYNTHESIS_OBJ	 = "SYNTHESIS"
-	ARRAY_OBJ = "ARRAY"
+	SYNTHESIS_OBJ    = "SYNTHESIS"
+	ARRAY_OBJ        = "ARRAY"
 )
 
 type Object interface {
@@ -69,7 +69,6 @@ func (b *Boolean) Inspect() string {
 }
 
 type Null struct {
-
 }
 
 func (n *Null) Type() Type {

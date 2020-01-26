@@ -27,7 +27,7 @@ var synthesises = map[string]*object.Synthesis{
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			if err := synth.Play(ctx, freq.Value, duration.Value * 1000); err != nil {
+			if err := synth.Play(ctx, freq.Value, duration.Value*1000); err != nil {
 				panic(err)
 			}
 		}()

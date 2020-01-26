@@ -6,14 +6,14 @@ const (
 	sampleRate      = 44100
 	channelNum      = 2
 	bitDepthInBytes = 2
-	bufferSize 		= 4096
+	bufferSize      = 4096
 )
 
 var otoContext, _ = oto.NewContext(sampleRate, channelNum, bitDepthInBytes, bufferSize)
 
 type Environment struct {
-	store map[string]Object
-	outer *Environment
+	store      map[string]Object
+	outer      *Environment
 	otoContext *oto.Context
 }
 
@@ -36,7 +36,7 @@ func (e *Environment) GetContext() *oto.Context {
 
 func NewEnvironment() *Environment {
 	s := make(map[string]Object)
-	return &Environment{store: s, outer: nil, otoContext:otoContext}
+	return &Environment{store: s, outer: nil, otoContext: otoContext}
 }
 
 func NewEnclosedEnvironment(outer *Environment) *Environment {

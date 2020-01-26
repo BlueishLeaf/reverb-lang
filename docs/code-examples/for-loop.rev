@@ -1,0 +1,23 @@
+var fibonacci = echo(n) begin
+    if n == 1 then
+        return 0
+    end
+    else if n == 2 then
+        return 1
+    end
+    else then
+        return fibonacci(n - 1) + fibonacci(n - 2)
+    end
+end
+
+var forLoop = echo(start, stop, f) begin
+    var loop = echo(i) begin
+        if i < stop then
+            print(f(i))
+            loop(i + 1)
+        end
+    end
+    loop(start)
+end
+
+forLoop(1, 11, fibonacci)

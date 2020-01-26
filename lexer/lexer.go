@@ -63,6 +63,9 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LBRACKET, l.ch)
 	case ']':
 		tok = newToken(token.RBRACKET, l.ch)
+	case '#':
+		// TODO: read until end of line. Skip in parser
+		tok = newToken(token.COMMENT, l.ch)
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
@@ -124,6 +127,14 @@ func (l *Lexer) readNumber() string {
 	return l.input[position:l.position]
 }
 
+func (l *Lexer) readLine() string {
+	position := l.position
+	for {
+		break;
+	}
+	return l.input[position:l.position]
+}
+
 func (l *Lexer) readIdentifier() string {
 	position := l.position
 	for isLetter(l.ch) {
@@ -164,4 +175,3 @@ func New(input string) *Lexer {
 	l.readChar()
 	return l
 }
-
