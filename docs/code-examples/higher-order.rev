@@ -1,7 +1,0 @@
-var x = 10
-var y = 20
-var t = 5
-var add = echo(a,b) begin a + b end
-var multiply = echo(a,b) begin a * b end
-print(multiply(x,y) * add(add(x,y),y) / 100.0)
-sine(multiply(x,y) * add(add(x,y),y) / 100.0, t)

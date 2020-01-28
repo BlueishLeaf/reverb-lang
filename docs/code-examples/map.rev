@@ -1,0 +1,17 @@
+var map = fn(array, f) begin
+    var loop = fn(array, accumulated) begin
+        if (length(array) == 0) then
+            return accumulated
+        end
+        return loop(tail(array), push(accumulated, f(head(array))))
+    end
+    return loop(array, [])
+end
+
+var nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+var double = fn(x) begin x * 2 end
+var square = fn(x) begin x * x end
+
+print(map(nums, double))
+print(map(nums, square))

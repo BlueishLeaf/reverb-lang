@@ -73,7 +73,6 @@ func evalPrefixExpression(operator string, right object.Object) object.Object {
 	}
 }
 
-// TODO: Reduce duplication in the next few functions
 func evalIntegerInfixExpression(operator string, left, right object.Object) object.Object {
 	leftVal := left.(*object.Integer).Value
 	rightVal := right.(*object.Integer).Value

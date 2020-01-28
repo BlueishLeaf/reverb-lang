@@ -8,10 +8,10 @@ import (
 func TestNextToken(t *testing.T) {
 	input := `var five = 5.56
 		var ten = 10
-		var add = echo(x, y) begin
+		var add = fn(x, y) begin
 			x + y
 		end
-		echo add(x, y) begin
+		fn add(x, y) begin
 			return x + y
 		end
 		var result = add(five, ten)
@@ -45,7 +45,7 @@ func TestNextToken(t *testing.T) {
 		{token.VAR, "var"},
 		{token.IDENT, "add"},
 		{token.ASSIGN, "="},
-		{token.FUNCTION, "echo"},
+		{token.FUNCTION, "fn"},
 		{token.LPAREN, "("},
 		{token.IDENT, "x"},
 		{token.COMMA, ","},
@@ -59,7 +59,7 @@ func TestNextToken(t *testing.T) {
 		{token.NEWLINE, "\n"},
 		{token.END, "end"},
 		{token.NEWLINE, "\n"},
-		{token.FUNCTION, "echo"},
+		{token.FUNCTION, "fn"},
 		{token.IDENT, "add"},
 		{token.LPAREN, "("},
 		{token.IDENT, "x"},

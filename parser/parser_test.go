@@ -640,7 +640,7 @@ func TestIfElseExpression(t *testing.T) {
 }
 
 func TestFunctionLiteralParsing(t *testing.T) {
-	input := `echo(x, y) begin x + y end`
+	input := `fn(x, y) begin x + y end`
 
 	l := lexer.New(input)
 	p := New(l)
@@ -691,9 +691,9 @@ func TestFunctionParameterParsing(t *testing.T) {
 		input          string
 		expectedParams []string
 	}{
-		{input: "echo() begin end", expectedParams: []string{}},
-		{input: "echo(x) begin end", expectedParams: []string{"x"}},
-		{input: "echo(x, y, z) begin end", expectedParams: []string{"x", "y", "z"}},
+		{input: "fn() begin end", expectedParams: []string{}},
+		{input: "fn(x) begin end", expectedParams: []string{"x"}},
+		{input: "fn(x, y, z) begin end", expectedParams: []string{"x", "y", "z"}},
 	}
 
 	for _, tt := range tests {

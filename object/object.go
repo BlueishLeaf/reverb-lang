@@ -75,8 +75,9 @@ func (n *Null) Type() Type {
 	return NULL_OBJ
 }
 
+// TODO: WHY MUST YOU BE LIKE THIS
 func (n *Null) Inspect() string {
-	return "null"
+	return ""
 }
 
 type ReturnValue struct {

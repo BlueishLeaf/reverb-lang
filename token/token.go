@@ -52,7 +52,7 @@ type Token struct {
 var keywords = map[string]TokenType{
 	"begin":  BEGIN,
 	"end":    END,
-	"echo":   FUNCTION,
+	"fn":   FUNCTION,
 	"var":    VAR,
 	"true":   TRUE,
 	"false":  FALSE,

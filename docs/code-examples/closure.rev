@@ -1,0 +1,11 @@
+var outer = fn() begin
+    var num = 1
+    var inner = fn() begin
+        return num
+    end
+    return inner
+end
+
+var func = outer()
+
+func()

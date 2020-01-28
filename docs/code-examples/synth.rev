@@ -1,0 +1,27 @@
+var isPrime = fn(n, i) begin
+    if n < 2 then return false end
+    if n == 2 then return true end
+    if i * i > n then return true end
+
+    var getRemainder = fn(num, divisor) begin
+        return num - divisor * (num / divisor)
+    end
+
+    if getRemainder(n, i) == 0 then return false end
+    return isPrime(n, i + 1)
+end
+
+var forLoop = fn(start, stop, f) begin
+    var loop = fn(i) begin
+        if i < stop then
+            if isPrime(i, 2) then
+                print(i)
+                sequence(i, 200)
+            end
+            loop(i + 1)
+        end
+    end
+    loop(start)
+end
+
+forLoop(1, 100, isPrime)

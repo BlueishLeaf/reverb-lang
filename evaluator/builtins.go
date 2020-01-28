@@ -6,7 +6,7 @@ import (
 )
 
 var builtins = map[string]*object.Builtin{
-	"len": {Fn: func(args ...object.Object) object.Object {
+	"length": {Fn: func(args ...object.Object) object.Object {
 		if len(args) != 1 {
 			return newError("wrong number of arguments. got=%d, want=%d", len(args), 1)
 		}
@@ -14,7 +14,7 @@ var builtins = map[string]*object.Builtin{
 		case *object.Array:
 			return &object.Integer{Value: int64(len(arg.Elements))}
 		default:
-			return newError("argument to `len` not supported, got %s", args[0].Type())
+			return newError("argument to `length` not supported, got %s", args[0].Type())
 		}
 	}},
 	"print": {
@@ -25,12 +25,12 @@ var builtins = map[string]*object.Builtin{
 			return NULL
 		},
 	},
-	"first": {Fn: func(args ...object.Object) object.Object {
+	"head": {Fn: func(args ...object.Object) object.Object {
 		if len(args) != 1 {
 			return newError("wrong number of arguments. got=%d, want=%d", len(args), 1)
 		}
 		if args[0].Type() != object.ARRAY_OBJ {
-			return newError("argument to `first` must be ARRAY, got %s", args[0].Type())
+			return newError("argument to `head` must be ARRAY, got %s", args[0].Type())
 		}
 		arr := args[0].(*object.Array)
 		if len(arr.Elements) > 0 {
@@ -38,26 +38,12 @@ var builtins = map[string]*object.Builtin{
 		}
 		return NULL
 	}},
-	"last": {Fn: func(args ...object.Object) object.Object {
+	"tail": {Fn: func(args ...object.Object) object.Object {
 		if len(args) != 1 {
 			return newError("wrong number of arguments. got=%d, want=%d", len(args), 1)
 		}
 		if args[0].Type() != object.ARRAY_OBJ {
-			return newError("argument to `last` must be ARRAY, got %s", args[0].Type())
-		}
-		arr := args[0].(*object.Array)
-		length := len(arr.Elements)
-		if length > 0 {
-			return arr.Elements[length-1]
-		}
-		return NULL
-	}},
-	"rest": {Fn: func(args ...object.Object) object.Object {
-		if len(args) != 1 {
-			return newError("wrong number of arguments. got=%d, want=%d", len(args), 1)
-		}
-		if args[0].Type() != object.ARRAY_OBJ {
-			return newError("argument to `rest` must be ARRAY, got %s", args[0].Type())
+			return newError("argument to `tail` must be ARRAY, got %s", args[0].Type())
 		}
 		arr := args[0].(*object.Array)
 		length := len(arr.Elements)

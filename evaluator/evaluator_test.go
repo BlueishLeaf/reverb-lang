@@ -274,7 +274,7 @@ func TestEvalVarStatements(t *testing.T) {
 }
 
 func TestEvalFunctionObject(t *testing.T) {
-	input := "echo(x) begin x + 2 end"
+	input := "fn(x) begin x + 2 end"
 	evaluated := testEval(input)
 	fn, ok := evaluated.(*object.Function)
 	if !ok {
@@ -298,12 +298,12 @@ func TestFunctionApplication(t *testing.T) {
 		input    string
 		expected int64
 	}{
-		{"var identity = echo(x) begin x end\nidentity(5)", 5},
-		{"var identity = echo(x) begin return x end\nidentity(5)", 5},
-		{"var double = echo(x) begin x * 2 end\ndouble(5)", 10},
-		{"var add = echo(x, y) begin x + y end\nadd(5, 5)", 10},
-		{"var add = echo(x, y) begin x + y end\nadd(5 + 5, add(5, 5))", 20},
-		{"echo(x) begin x end (5)", 5},
+		{"var identity = fn(x) begin x end\nidentity(5)", 5},
+		{"var identity = fn(x) begin return x end\nidentity(5)", 5},
+		{"var double = fn(x) begin x * 2 end\ndouble(5)", 10},
+		{"var add = fn(x, y) begin x + y end\nadd(5, 5)", 10},
+		{"var add = fn(x, y) begin x + y end\nadd(5 + 5, add(5, 5))", 20},
+		{"fn(x) begin x end (5)", 5},
 	}
 	for _, tt := range tests {
 		testIntegerObject(t, testEval(tt.input), tt.expected)
@@ -315,7 +315,7 @@ func TestEnclosingEnvironments(t *testing.T) {
 		var second = 10
 		var third = 10
 		
-		var ourFunction = echo(first) begin
+		var ourFunction = fn(first) begin
 		  var second = 20
 		
 		  first + second + third
@@ -331,17 +331,14 @@ func TestBuiltinFunctions(t *testing.T) {
 		input    string
 		expected interface{}
 	}{
-		{`len(1)`, "argument to `len` not supported, got INTEGER"},
-		{`len([1, 2, 3])`, 3},
-		{`len([])`, 0},
-		{`first([1, 2, 3])`, 1},
-		{`first([])`, nil},
-		{`first(1)`, "argument to `first` must be ARRAY, got INTEGER"},
-		{`last([1, 2, 3])`, 3},
-		{`last([])`, nil},
-		{`last(1)`, "argument to `last` must be ARRAY, got INTEGER"},
-		{`rest([1, 2, 3])`, []int{2, 3}},
-		{`rest([])`, nil},
+		{`length(1)`, "argument to `length` not supported, got INTEGER"},
+		{`length([1, 2, 3])`, 3},
+		{`length([])`, 0},
+		{`head([1, 2, 3])`, 1},
+		{`head([])`, nil},
+		{`head(1)`, "argument to `head` must be ARRAY, got INTEGER"},
+		{`tail([1, 2, 3])`, []int{2, 3}},
+		{`tail([])`, nil},
 		{`push([], 1)`, []int{1}},
 		{`push(1, 1)`, "argument to `push` must be ARRAY, got INTEGER"},
 	}
