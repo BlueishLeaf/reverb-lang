@@ -145,18 +145,17 @@ var synthesises = map[string]*object.Synthesis{
 			return newError("argument to `sequence` must be INTEGER_OBJ, got %s", args[0].Type())
 		}
 		sequenceTerm := args[0].(*object.Integer)
+		var posTerm int64
+		if sequenceTerm.Value < 0 {
+			posTerm = sequenceTerm.Value * -1
+		} else {
+			posTerm = sequenceTerm.Value
+		}
 		duration := args[1].(*object.Integer)
-		freq := pianoSequence[sequenceTerm.Value % 88]
-		// TODO: Create a new sine wave and add it to the global queue
-		var wg sync.WaitGroup
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			if err := synth.Play(ctx, freq, duration.Value); err != nil {
-				panic(err)
-			}
-		}()
-		wg.Wait()
+		freq := pianoSequence[posTerm % 88]
+		if err := synth.Play(ctx, freq, duration.Value); err != nil {
+			panic(err)
+		}
 		return NULL
 	}},
 }

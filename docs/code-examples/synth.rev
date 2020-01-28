@@ -12,16 +12,57 @@ var isPrime = fn(n, i) begin
 end
 
 var forLoop = fn(start, stop, f) begin
-    var loop = fn(i) begin
+    var loop = fn(i, primes) begin
         if i < stop then
-            if isPrime(i, 2) then
-                print(i)
-                sequence(i, 200)
+            if f(i, 2) then
+                return loop(i + 1, push(primes, i))
             end
-            loop(i + 1)
+            return loop(i + 1, primes)
         end
+        return primes
     end
-    loop(start)
+    loop(start, [])
 end
 
-forLoop(1, 100, isPrime)
+var mapPrimes = fn(array, f) begin
+    var loop = fn(array, accumulated) begin
+        if (length(array) == 1) then
+            return accumulated
+        end
+        return loop(tail(array), push(accumulated, f(head(array), tail(array)[0])))
+    end
+    return loop(array, [])
+end
+
+var mapNegatives = fn(array, f) begin
+    var loop = fn(array, accumulated) begin
+        if (length(array) == 0) then
+            return accumulated
+        end
+        return loop(tail(array), push(accumulated, f(head(array))))
+    end
+    return loop(array, [])
+end
+
+var diff = fn(x, y) begin x - y end
+var square = fn(x) begin x * x end
+
+var primes = forLoop(1, 100, isPrime)
+print(primes)
+
+var diffs = mapPrimes(primes, fn(x, y) begin x - y end)
+print(diffs)
+
+var loopSequence = fn(array) begin
+    var loop = fn(array) begin
+        if (length(array) == 0) then
+            return array
+        end
+        sequence(head(array), 200)
+        return loop(tail(array))
+    end
+    return loop(array, [])
+end
+
+sine(34.0, 10000)
+loopSequence(diffs)
