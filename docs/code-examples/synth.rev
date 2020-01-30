@@ -58,11 +58,10 @@ var loopSequence = fn(array) begin
         if (length(array) == 0) then
             return array
         end
-        sequence(head(array), 200)
+        sequence(head(array), 1000)
         return loop(tail(array))
     end
     return loop(array, [])
 end
 
-sine(34.0, 10000)
 loopSequence(diffs)

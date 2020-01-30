@@ -9,13 +9,13 @@ var fibonacci = fn(n) begin
 end
 
 var forLoop = fn(start, stop, f) begin
-    var loop = fn(i) begin
+    var loop = fn(i, sequence) begin
         if i < stop then
-            print(f(i))
-            loop(i + 1)
+            return loop(i + 1, push(sequence, f(i)))
         end
+        return sequence
     end
-    loop(start)
+    loop(start, [])
 end
 
-forLoop(1, 11, fibonacci)
+print(forLoop(1, 20, fibonacci))
