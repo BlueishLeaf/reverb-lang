@@ -2,21 +2,22 @@ package parser
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/BlueishLeaf/reverb-lang/ast"
 	"github.com/BlueishLeaf/reverb-lang/lexer"
 	"github.com/BlueishLeaf/reverb-lang/token"
-	"strconv"
 )
 
 const (
-	_ int = iota
-	LOWEST
-	EQUALS       // ==
-	LESS_GREATER // > or <
-	SUM          // +
-	PRODUCT      // *
-	PREFIX       // -x or !x
-	CALL         // foobar(x)
+	_            int = iota
+	LOWEST           // d
+	EQUALS           // ==
+	LESS_GREATER     // > or <
+	SUM              // +
+	PRODUCT          // *
+	PREFIX           // -x or !x
+	CALL             // foobar(x)
 	INDEX
 )
 

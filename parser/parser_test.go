@@ -2,10 +2,11 @@ package parser
 
 import (
 	"fmt"
-	"github.com/BlueishLeaf/reverb-lang/ast"
-	"github.com/BlueishLeaf/reverb-lang/lexer"
 	"strconv"
 	"testing"
+
+	"github.com/BlueishLeaf/reverb-lang/ast"
+	"github.com/BlueishLeaf/reverb-lang/lexer"
 )
 
 func checkParserErrors(t *testing.T, p *Parser) {
