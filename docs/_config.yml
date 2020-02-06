@@ -29,7 +29,7 @@ twitter_username: BlueishLeaf
 github_username:  BlueishLeaf
 
 # Build settings
-theme: minima
+theme: jekyll-theme-minimal
 plugins:
   - jekyll-feed
 
