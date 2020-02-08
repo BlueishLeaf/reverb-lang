@@ -1,29 +1,22 @@
 ---
 layout: post
-title:  "Welcome to Jekyll!"
+title:  "The Story So Far"
 date:   2020-02-08 00:20:23 +0000
 categories: jekyll update
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+# September
+The first month of development was aimed primarily at researching interpreters as well as the Go programming language.
+I followed an online course to learn Go and read a book on creating interpreters.
 
-Jekyll requires blog post files to be named according to the following format:
+# October
+A lot of the core code behind Reverb was written in this month. In particular, the first versions of the lexer, parser, and evaluater were written and implemented.
+At this point the language was very procedural in nature as I had not yet decided to go functional.
 
-`YEAR-MONTH-DAY-title.MARKUP`
+# November
+This month saw further improvement to each component of the interpreter, including writing unit and integration tests for each of them. A basic CLI to interface with Reverb was written, as well as a basic audio synthesizer.
 
-Where `YEAR` is a four-digit number, `MONTH` and `DAY` are both two-digit numbers, and `MARKUP` is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+# December
+No development took place during this time due to the christmas exams.
 
-Jekyll also offers powerful support for code snippets:
-
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
-
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+# January
+Development in January was focused on implementing certain functional programming concepts such as immutable variables, first-order functions, higher-order functions, and function purity. I decided to migrate to a different audio library for the synthesizer as the old library proved insufficient for Reverb's needs.
