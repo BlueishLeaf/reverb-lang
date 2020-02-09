@@ -25,7 +25,7 @@ func (l *Lexer) peekChar() byte {
 
 func (l *Lexer) readComment() string {
 	position := l.position
-	for l.ch != '\n' {
+	for l.ch != '\n' && l.ch != 0 {
 		l.readChar()
 	}
 	return l.input[position:l.position]
