@@ -3,117 +3,147 @@ package object
 import (
 	"bytes"
 	"fmt"
-	"github.com/BlueishLeaf/reverb-lang/ast"
-	"github.com/hajimehoshi/oto"
 	"strings"
+
+	"github.com/BlueishLeaf/reverb-lang/ast"
 )
 
+// Type represents the type of an object
 type Type string
 
+// BuiltinFunction represent functions that are part of the Reverb standard library
 type BuiltinFunction func(args ...Object) Object
 
-type SynthesisFunction func(ctx *oto.Context, args ...Object) Object
-
 const (
-	INTEGER_OBJ      = "INTEGER"
-	FLOAT_OBJ        = "FLOAT"
-	BOOLEAN_OBJ      = "BOOLEAN"
-	NULL_OBJ         = "NULL"
-	RETURN_VALUE_OBJ = "RETURN_VALUE"
-	ERROR_OBJ        = "ERROR"
-	FUNCTION_OBJ     = "FUNCTION"
-	BUILTIN_OBJ      = "BUILTIN"
-	SYNTHESIS_OBJ    = "SYNTHESIS"
-	ARRAY_OBJ        = "ARRAY"
+	// IntegerObj represents integer objects
+	IntegerObj = "INTEGER"
+	// FloatObj represents floating point objects
+	FloatObj = "FLOAT"
+	// BooleanObj represents boolean objects
+	BooleanObj = "BOOLEAN"
+	// NullObj represents the concept of null
+	NullObj = "NULL"
+	// ReturnValueObj represents a value returned from a function
+	ReturnValueObj = "RETURN_VALUE"
+	// ErrorObj represents an error return from the interpreter
+	ErrorObj = "ERROR"
+	// FunctionObj represents a user-defined function object
+	FunctionObj = "FUNCTION"
+	// BuiltinObj represents a Reverb function object
+	BuiltinObj = "BUILTIN"
+	// SynthesisObj represents a Reverb synthesis function object
+	SynthesisObj = "SYNTHESIS"
+	// ArrayObj represents an array object
+	ArrayObj = "ARRAY"
 )
 
+// Object represents the smallest component of a Reverb program
 type Object interface {
 	Type() Type
 	Inspect() string
 }
 
+// Integer represents the integer data type
 type Integer struct {
 	Value int64
 }
 
+// Type returns the integer object type
 func (i *Integer) Type() Type {
-	return INTEGER_OBJ
+	return IntegerObj
 }
 
+// Inspect returns the string value of the integer object
 func (i *Integer) Inspect() string {
 	return fmt.Sprintf("%d", i.Value)
 }
 
+// Float represents the floating point data type
 type Float struct {
 	Value float64
 }
 
+// Type returns the float object type
 func (f *Float) Type() Type {
-	return FLOAT_OBJ
+	return FloatObj
 }
 
+// Inspect returns the string value of the float object
 func (f *Float) Inspect() string {
 	return fmt.Sprintf("%f", f.Value)
 }
 
+// Boolean represents the boolean data type
 type Boolean struct {
 	Value bool
 }
 
+// Type returns the boolean object type
 func (b *Boolean) Type() Type {
-	return BOOLEAN_OBJ
+	return BooleanObj
 }
 
+// Inspect returns the string value of the boolean object
 func (b *Boolean) Inspect() string {
 	return fmt.Sprintf("%t", b.Value)
 }
 
-type Null struct {
-}
+// Null represents the null data type
+type Null struct{}
 
+// Type returns the null object type
 func (n *Null) Type() Type {
-	return NULL_OBJ
+	return NullObj
 }
 
-// TODO: WHY MUST YOU BE LIKE THIS
+// Inspect returns the string value of the null object
 func (n *Null) Inspect() string {
-	return ""
+	return "null"
 }
 
+// ReturnValue represents the return value object
 type ReturnValue struct {
 	Value Object
 }
 
+// Type returns the return value object type
 func (rv *ReturnValue) Type() Type {
-	return RETURN_VALUE_OBJ
+	return ReturnValueObj
 }
 
+// Inspect returns the string value of the return value object
 func (rv *ReturnValue) Inspect() string {
 	return rv.Value.Inspect()
 }
 
+// Error represents an interpreter error
 type Error struct {
 	Message string
 }
 
+// Type returns the error object type
 func (e *Error) Type() Type {
-	return ERROR_OBJ
+	return ErrorObj
 }
 
+// Inspect returns the string value of the the error object
 func (e *Error) Inspect() string {
 	return "ERROR: " + e.Message
 }
 
+// Function represents the function type
 type Function struct {
 	Parameters []*ast.Identifier
 	Body       *ast.BlockStatement
 	Env        *Environment
 }
 
+// Type returns the function object type
 func (f *Function) Type() Type {
-	return FUNCTION_OBJ
+	return FunctionObj
 }
 
+// Inspect returns the string value of the function object
 func (f *Function) Inspect() string {
 	var out bytes.Buffer
 	var params []string
@@ -128,38 +158,32 @@ func (f *Function) Inspect() string {
 	return out.String()
 }
 
+// Builtin represents a builtin function object
 type Builtin struct {
 	Fn BuiltinFunction
 }
 
+// Type returns the builtin function object type
 func (b *Builtin) Type() Type {
-	return BUILTIN_OBJ
+	return BuiltinObj
 }
 
+// Inspect returns the string value of the builtin function object
 func (b *Builtin) Inspect() string {
 	return "builtin function"
 }
 
-type Synthesis struct {
-	Fn SynthesisFunction
-}
-
-func (s *Synthesis) Type() Type {
-	return SYNTHESIS_OBJ
-}
-
-func (s *Synthesis) Inspect() string {
-	return "synthesis function"
-}
-
+// Array represents the array data type
 type Array struct {
 	Elements []Object
 }
 
+// Type returns the array object type
 func (a *Array) Type() Type {
-	return ARRAY_OBJ
+	return ArrayObj
 }
 
+// Inspect returns the string value of the array object
 func (a *Array) Inspect() string {
 	var out bytes.Buffer
 	var elements []string

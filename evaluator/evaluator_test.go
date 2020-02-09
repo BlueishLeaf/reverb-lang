@@ -1,10 +1,11 @@
 package evaluator
 
 import (
+	"testing"
+
 	"github.com/BlueishLeaf/reverb-lang/lexer"
 	"github.com/BlueishLeaf/reverb-lang/object"
 	"github.com/BlueishLeaf/reverb-lang/parser"
-	"testing"
 )
 
 func testEval(input string) object.Object {
@@ -55,7 +56,7 @@ func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
 }
 
 func testNullObject(t *testing.T, obj object.Object) bool {
-	if obj != NULL {
+	if obj != Null {
 		t.Errorf("object is not NULL. got=%T (%+v)", obj, obj)
 		return false
 	}
@@ -75,6 +76,7 @@ func TestEvalIntegerExpression(t *testing.T) {
 		{"2 * 2 * 2 * 2 * 2", 32},
 		{"-50 + 100 + -50", 0},
 		{"5 * 2 + 10", 20},
+		{"5 % 2", 1},
 		{"5 + 2 * 10", 25},
 		{"20 + 2 * -10", 0},
 		{"50 / 2 * 2 + 10", 60},
@@ -133,6 +135,10 @@ func TestEvalBooleanExpression(t *testing.T) {
 		{"(1 < 2) == false", false},
 		{"(1 > 2) == true", false},
 		{"(1 > 2) == false", true},
+		{"(5 > 2) && (4 > 10)", false},
+		{"(5 > 2) && (4 < 10)", true},
+		{"(5 > 2) || (4 < 10)", true},
+		{"(5 < 2) || (10 > 20)", false},
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
@@ -192,7 +198,7 @@ func TestEvalReturnStatements(t *testing.T) {
 		{"if 10 > 1 then return 10 end", 10},
 		{
 			`if 10 > 1 then
-				  if 10 > 1 then
+				  if 10 > 1 then # Just ignore me pls
 					return 10
 				  end
 				

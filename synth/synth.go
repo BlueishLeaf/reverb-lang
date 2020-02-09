@@ -1,9 +1,10 @@
 package synth
 
 import (
-	"github.com/hajimehoshi/oto"
 	"io"
 	"math"
+
+	"github.com/hajimehoshi/oto"
 )
 
 const (

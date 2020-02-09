@@ -3,14 +3,16 @@ package repl
 import (
 	"bufio"
 	"fmt"
+	"io"
+
 	"github.com/BlueishLeaf/reverb-lang/evaluator"
 	"github.com/BlueishLeaf/reverb-lang/lexer"
 	"github.com/BlueishLeaf/reverb-lang/object"
 	"github.com/BlueishLeaf/reverb-lang/parser"
-	"io"
 )
 
-const PROMPT = ">>"
+// Prompt represents the symbol to prompt the user to enter code
+const Prompt = ">>"
 
 func printParserErrors(out io.Writer, errors []string) {
 	for _, msg := range errors {
@@ -18,11 +20,12 @@ func printParserErrors(out io.Writer, errors []string) {
 	}
 }
 
+// Start initiates the Reverb REPL
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
 	environment := object.NewEnvironment()
 	for {
-		fmt.Printf(PROMPT)
+		fmt.Printf(Prompt)
 		scanned := scanner.Scan()
 		if !scanned {
 			return

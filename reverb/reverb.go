@@ -3,17 +3,18 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
+	"log"
+	"os"
+	"strings"
+	"time"
+
 	"github.com/BlueishLeaf/reverb-lang/evaluator"
 	"github.com/BlueishLeaf/reverb-lang/lexer"
 	"github.com/BlueishLeaf/reverb-lang/object"
 	"github.com/BlueishLeaf/reverb-lang/parser"
 	"github.com/BlueishLeaf/reverb-lang/repl"
 	"github.com/urfave/cli/v2"
-	"io"
-	"log"
-	"os"
-	"strings"
-	"time"
 )
 
 func main() {

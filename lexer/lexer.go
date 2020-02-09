@@ -2,6 +2,7 @@ package lexer
 
 import "github.com/BlueishLeaf/reverb-lang/token"
 
+// Lexer represents the lexical analysis component of the interpreter
 type Lexer struct {
 	input        string
 	position     int
@@ -9,103 +10,7 @@ type Lexer struct {
 	ch           byte
 }
 
-func (l *Lexer) NextToken() token.Token {
-	var tok token.Token
-
-	l.skipWhitespace()
-
-	switch l.ch {
-	case '=':
-		if l.peekChar() == '=' {
-			ch := l.ch
-			l.readChar()
-			literal := string(ch) + string(l.ch)
-			tok = token.Token{
-				Type:    token.EQ,
-				Literal: literal,
-			}
-		} else {
-			tok = newToken(token.ASSIGN, l.ch)
-		}
-	case '\n':
-		tok = newToken(token.NEWLINE, l.ch)
-	case '(':
-		tok = newToken(token.LPAREN, l.ch)
-	case ')':
-		tok = newToken(token.RPAREN, l.ch)
-	case ',':
-		tok = newToken(token.COMMA, l.ch)
-	case '+':
-		tok = newToken(token.PLUS, l.ch)
-	case '-':
-		tok = newToken(token.MINUS, l.ch)
-	case '!':
-		if l.peekChar() == '=' {
-			ch := l.ch
-			l.readChar()
-			literal := string(ch) + string(l.ch)
-			tok = token.Token{
-				Type:    token.NOT_EQ,
-				Literal: literal,
-			}
-		} else {
-			tok = newToken(token.BANG, l.ch)
-		}
-	case '/':
-		tok = newToken(token.SLASH, l.ch)
-	case '*':
-		tok = newToken(token.ASTERISK, l.ch)
-	case '<':
-		tok = newToken(token.LT, l.ch)
-	case '>':
-		tok = newToken(token.GT, l.ch)
-	case '[':
-		tok = newToken(token.LBRACKET, l.ch)
-	case ']':
-		tok = newToken(token.RBRACKET, l.ch)
-	case '#':
-		// TODO: read until end of line. Skip in parser
-		tok = newToken(token.COMMENT, l.ch)
-	case 0:
-		tok.Literal = ""
-		tok.Type = token.EOF
-	default:
-		if isLetter(l.ch) {
-			tok.Literal = l.readIdentifier()
-			tok.Type = token.LookupIndent(tok.Literal)
-			return tok
-		} else if isDigit(l.ch) {
-			number := l.readNumber() // read the first grouping of digits
-			if l.ch == '.' {
-				l.readChar() // skip over the period
-				tok.Type = token.FLOAT
-				tok.Literal = number + "." + l.readNumber()
-			} else {
-				tok.Type = token.INT
-				tok.Literal = number
-			}
-			return tok
-		} else {
-			tok = newToken(token.ILLEGAL, l.ch)
-		}
-	}
-	l.readChar()
-	return tok
-}
-
-func (l *Lexer) readString() string {
-	position := l.position + 1
-	for {
-		l.readChar()
-		if l.ch == '"' || l.ch == 0 {
-			break
-		}
-	}
-	return l.input[position:l.position]
-}
-
 func (l *Lexer) skipWhitespace() {
-	// Skips over whitespace characters that aren't newlines
 	for l.ch == ' ' || l.ch == '\t' {
 		l.readChar()
 	}
@@ -114,23 +19,22 @@ func (l *Lexer) skipWhitespace() {
 func (l *Lexer) peekChar() byte {
 	if l.readPosition >= len(l.input) {
 		return 0
-	} else {
-		return l.input[l.readPosition]
 	}
+	return l.input[l.readPosition]
+}
+
+func (l *Lexer) readComment() string {
+	position := l.position
+	for l.ch != '\n' {
+		l.readChar()
+	}
+	return l.input[position:l.position]
 }
 
 func (l *Lexer) readNumber() string {
 	position := l.position
 	for isDigit(l.ch) {
 		l.readChar()
-	}
-	return l.input[position:l.position]
-}
-
-func (l *Lexer) readLine() string {
-	position := l.position
-	for {
-		break;
 	}
 	return l.input[position:l.position]
 }
@@ -161,13 +65,145 @@ func isDigit(ch byte) bool {
 	return '0' <= ch && ch <= '9'
 }
 
-func newToken(tokenType token.TokenType, ch byte) token.Token {
+func newToken(tokenType token.Type, ch byte) token.Token {
 	return token.Token{
 		Type:    tokenType,
 		Literal: string(ch),
 	}
 }
 
+// NextToken checks the current token being processed and continues
+// on to the next one
+func (l *Lexer) NextToken() token.Token {
+	var tok token.Token
+	l.skipWhitespace()
+	switch l.ch {
+	case '=':
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			literal := string(ch) + string(l.ch)
+			tok = token.Token{
+				Type:    token.Equal,
+				Literal: literal,
+			}
+		} else {
+			tok = newToken(token.Assign, l.ch)
+		}
+	case '\n':
+		tok = newToken(token.Newline, l.ch)
+	case '(':
+		tok = newToken(token.LParen, l.ch)
+	case ')':
+		tok = newToken(token.RParen, l.ch)
+	case ',':
+		tok = newToken(token.Comma, l.ch)
+	case '+':
+		tok = newToken(token.Plus, l.ch)
+	case '-':
+		tok = newToken(token.Minus, l.ch)
+	case '!':
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			literal := string(ch) + string(l.ch)
+			tok = token.Token{
+				Type:    token.NotEqual,
+				Literal: literal,
+			}
+		} else {
+			tok = newToken(token.Bang, l.ch)
+		}
+	case '/':
+		tok = newToken(token.Slash, l.ch)
+	case '*':
+		tok = newToken(token.Asterisk, l.ch)
+	case '%':
+		tok = newToken(token.Mod, l.ch)
+	case '<':
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			literal := string(ch) + string(l.ch)
+			tok = token.Token{
+				Type:    token.LTE,
+				Literal: literal,
+			}
+		} else {
+			tok = newToken(token.LT, l.ch)
+		}
+	case '>':
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			literal := string(ch) + string(l.ch)
+			tok = token.Token{
+				Type:    token.GTE,
+				Literal: literal,
+			}
+		} else {
+			tok = newToken(token.GT, l.ch)
+		}
+	case '&':
+		if l.peekChar() == '&' {
+			ch := l.ch
+			l.readChar()
+			literal := string(ch) + string(l.ch)
+			tok = token.Token{
+				Type:    token.And,
+				Literal: literal,
+			}
+		} else {
+			tok = newToken(token.Illegal, l.ch)
+		}
+	case '|':
+		if l.peekChar() == '|' {
+			ch := l.ch
+			l.readChar()
+			literal := string(ch) + string(l.ch)
+			tok = token.Token{
+				Type:    token.Or,
+				Literal: literal,
+			}
+		} else {
+			tok = newToken(token.Illegal, l.ch)
+		}
+	case '[':
+		tok = newToken(token.LBracket, l.ch)
+	case ']':
+		tok = newToken(token.RBracket, l.ch)
+	case '#':
+		tok.Literal = l.readComment()
+		tok.Type = token.Comment
+		return tok
+	case 0:
+		tok.Literal = ""
+		tok.Type = token.EOF
+	default:
+		if isLetter(l.ch) {
+			tok.Literal = l.readIdentifier()
+			tok.Type = token.LookupKeyword(tok.Literal)
+			return tok
+		} else if isDigit(l.ch) {
+			number := l.readNumber()
+			if l.ch == '.' {
+				l.readChar()
+				tok.Type = token.Float
+				tok.Literal = number + "." + l.readNumber()
+			} else {
+				tok.Type = token.Int
+				tok.Literal = number
+			}
+			return tok
+		} else {
+			tok = newToken(token.Illegal, l.ch)
+		}
+	}
+	l.readChar()
+	return tok
+}
+
+// New creates a new lexer instance
 func New(input string) *Lexer {
 	l := &Lexer{
 		input: input,

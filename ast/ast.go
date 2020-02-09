@@ -2,35 +2,40 @@ package ast
 
 import (
 	"bytes"
-	"github.com/BlueishLeaf/reverb-lang/token"
 	"strings"
+
+	"github.com/BlueishLeaf/reverb-lang/token"
 )
 
+// Node represents a node on the AST
 type Node interface {
 	TokenLiteral() string
 	String() string
 }
 
+// Statement represents a statement on the AST
 type Statement interface {
 	Node
 	statementNode()
 }
 
+// Expression represents an expression on the AST
 type Expression interface {
 	Node
 	expressionNode()
 }
 
+// Program represents a grouping of statements
 type Program struct {
 	Statements []Statement
 }
 
+// TokenLiteral returns the statement's token
 func (p *Program) TokenLiteral() string {
 	if len(p.Statements) > 0 {
 		return p.Statements[0].TokenLiteral()
-	} else {
-		return ""
 	}
+	return ""
 }
 
 func (p *Program) String() string {
@@ -41,15 +46,15 @@ func (p *Program) String() string {
 	return out.String()
 }
 
+// Identifier represents a user-defined identifier on the AST
 type Identifier struct {
 	Token token.Token
 	Value string
 }
 
-func (i *Identifier) expressionNode() {
+func (i *Identifier) expressionNode() {}
 
-}
-
+// TokenLiteral returns the identifier's token
 func (i *Identifier) TokenLiteral() string {
 	return i.Token.Literal
 }
@@ -58,16 +63,16 @@ func (i *Identifier) String() string {
 	return i.Value
 }
 
+// VarStatement represents a variable assignment on the AST
 type VarStatement struct {
 	Token token.Token
 	Name  *Identifier
 	Value Expression
 }
 
-func (ls *VarStatement) statementNode() {
+func (ls *VarStatement) statementNode() {}
 
-}
-
+// TokenLiteral returns the var statement's token
 func (ls *VarStatement) TokenLiteral() string {
 	return ls.Token.Literal
 }
@@ -83,15 +88,15 @@ func (ls *VarStatement) String() string {
 	return out.String()
 }
 
+// ReturnStatement represents a return statement on the AST
 type ReturnStatement struct {
 	Token       token.Token
 	ReturnValue Expression
 }
 
-func (rs *ReturnStatement) statementNode() {
+func (rs *ReturnStatement) statementNode() {}
 
-}
-
+// TokenLiteral returns the return statement's token
 func (rs *ReturnStatement) TokenLiteral() string {
 	return rs.Token.Literal
 }
@@ -105,15 +110,15 @@ func (rs *ReturnStatement) String() string {
 	return out.String()
 }
 
+// ExpressionStatement represents an expression on the AST
 type ExpressionStatement struct {
 	Token      token.Token
 	Expression Expression
 }
 
-func (es *ExpressionStatement) statementNode() {
+func (es *ExpressionStatement) statementNode() {}
 
-}
-
+// TokenLiteral returns the expression's token
 func (es *ExpressionStatement) TokenLiteral() string {
 	return es.Token.Literal
 }
@@ -125,15 +130,15 @@ func (es *ExpressionStatement) String() string {
 	return ""
 }
 
+// IntegerLiteral represents an integer literal on the AST
 type IntegerLiteral struct {
 	Token token.Token
 	Value int64
 }
 
-func (il *IntegerLiteral) expressionNode() {
+func (il *IntegerLiteral) expressionNode() {}
 
-}
-
+// TokenLiteral returns the integer literal's token literal
 func (il *IntegerLiteral) TokenLiteral() string {
 	return il.Token.Literal
 }
@@ -142,15 +147,15 @@ func (il *IntegerLiteral) String() string {
 	return il.Token.Literal
 }
 
+// FloatLiteral represents a float literal on the AST
 type FloatLiteral struct {
 	Token token.Token
 	Value float64
 }
 
-func (fl *FloatLiteral) expressionNode() {
+func (fl *FloatLiteral) expressionNode() {}
 
-}
-
+// TokenLiteral returns the float literal's token literal
 func (fl *FloatLiteral) TokenLiteral() string {
 	return fl.Token.Literal
 }
@@ -159,16 +164,16 @@ func (fl *FloatLiteral) String() string {
 	return fl.Token.Literal
 }
 
+// PrefixExpression represents a prefix expression on the AST
 type PrefixExpression struct {
 	Token    token.Token
 	Operator string
 	Right    Expression
 }
 
-func (pe *PrefixExpression) expressionNode() {
+func (pe *PrefixExpression) expressionNode() {}
 
-}
-
+// TokenLiteral returns the prefix expression's token literal
 func (pe *PrefixExpression) TokenLiteral() string {
 	return pe.Token.Literal
 }
@@ -182,6 +187,7 @@ func (pe *PrefixExpression) String() string {
 	return out.String()
 }
 
+// InfixExpression represents an infix expression on the AST
 type InfixExpression struct {
 	Token    token.Token
 	Left     Expression
@@ -189,10 +195,9 @@ type InfixExpression struct {
 	Right    Expression
 }
 
-func (ie *InfixExpression) expressionNode() {
+func (ie *InfixExpression) expressionNode() {}
 
-}
-
+// TokenLiteral returns the infix expression's token literal
 func (ie *InfixExpression) TokenLiteral() string {
 	return ie.Token.Literal
 }
@@ -207,15 +212,15 @@ func (ie *InfixExpression) String() string {
 	return out.String()
 }
 
+// Boolean represents a boolean on the AST
 type Boolean struct {
 	Token token.Token
 	Value bool
 }
 
-func (b *Boolean) expressionNode() {
+func (b *Boolean) expressionNode() {}
 
-}
-
+// TokenLiteral returns the boolean's token literal
 func (b *Boolean) TokenLiteral() string {
 	return b.Token.Literal
 }
@@ -224,15 +229,15 @@ func (b *Boolean) String() string {
 	return b.Token.Literal
 }
 
+// BlockStatement represents a code block statement on the AST
 type BlockStatement struct {
 	Token      token.Token
 	Statements []Statement
 }
 
-func (bs *BlockStatement) statementNode() {
+func (bs *BlockStatement) statementNode() {}
 
-}
-
+// TokenLiteral returns the code block's token literal
 func (bs *BlockStatement) TokenLiteral() string {
 	return bs.Token.Literal
 }
@@ -245,6 +250,7 @@ func (bs *BlockStatement) String() string {
 	return out.String()
 }
 
+// IfExpression represents an if expression on the AST
 type IfExpression struct {
 	Token       token.Token
 	Condition   Expression
@@ -252,10 +258,9 @@ type IfExpression struct {
 	Alternative *BlockStatement
 }
 
-func (ie *IfExpression) expressionNode() {
+func (ie *IfExpression) expressionNode() {}
 
-}
-
+// TokenLiteral returns the if expression's token literal
 func (ie *IfExpression) TokenLiteral() string {
 	return ie.Token.Literal
 }
@@ -273,16 +278,16 @@ func (ie *IfExpression) String() string {
 	return out.String()
 }
 
+// FunctionLiteral represents a function literal on the AST
 type FunctionLiteral struct {
 	Token      token.Token
 	Parameters []*Identifier
 	Body       *BlockStatement
 }
 
-func (fl *FunctionLiteral) expressionNode() {
+func (fl *FunctionLiteral) expressionNode() {}
 
-}
-
+// TokenLiteral returns the function literal's token literal
 func (fl *FunctionLiteral) TokenLiteral() string {
 	return fl.Token.Literal
 }
@@ -301,16 +306,16 @@ func (fl *FunctionLiteral) String() string {
 	return out.String()
 }
 
+// CallExpression represents a function call on the AST
 type CallExpression struct {
 	Token     token.Token
 	Function  Expression
 	Arguments []Expression
 }
 
-func (ce *CallExpression) expressionNode() {
+func (ce *CallExpression) expressionNode() {}
 
-}
-
+// TokenLiteral returns the call expression's token literal
 func (ce *CallExpression) TokenLiteral() string {
 	return ce.Token.Literal
 }
@@ -328,15 +333,15 @@ func (ce *CallExpression) String() string {
 	return out.String()
 }
 
+// ArrayLiteral represents an array on the AST
 type ArrayLiteral struct {
 	Token    token.Token
 	Elements []Expression
 }
 
-func (al *ArrayLiteral) expressionNode() {
+func (al *ArrayLiteral) expressionNode() {}
 
-}
-
+// TokenLiteral returns the array's token literal
 func (al *ArrayLiteral) TokenLiteral() string {
 	return al.Token.Literal
 }
@@ -353,16 +358,16 @@ func (al *ArrayLiteral) String() string {
 	return out.String()
 }
 
+// IndexExpression represents an array index expression on the AST
 type IndexExpression struct {
 	Token token.Token
 	Left  Expression
 	Index Expression
 }
 
-func (ie *IndexExpression) expressionNode() {
+func (ie *IndexExpression) expressionNode() {}
 
-}
-
+// TokenLiteral returns the index expression's token literal
 func (ie *IndexExpression) TokenLiteral() string {
 	return ie.Token.Literal
 }

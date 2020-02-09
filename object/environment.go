@@ -1,22 +1,12 @@
 package object
 
-import "github.com/hajimehoshi/oto"
-
-const (
-	sampleRate      = 44100
-	channelNum      = 2
-	bitDepthInBytes = 2
-	bufferSize      = 4096
-)
-
-var otoContext, _ = oto.NewContext(sampleRate, channelNum, bitDepthInBytes, bufferSize)
-
+// Environment represents a virtual environment within Reverb
 type Environment struct {
-	store      map[string]Object
-	outer      *Environment
-	otoContext *oto.Context
+	store map[string]Object
+	outer *Environment
 }
 
+// Get returns an object within the environment
 func (e *Environment) Get(name string) (Object, bool) {
 	obj, ok := e.store[name]
 	if !ok && e.outer != nil {
@@ -25,20 +15,19 @@ func (e *Environment) Get(name string) (Object, bool) {
 	return obj, ok
 }
 
+// Set assigns a new object within the environment
 func (e *Environment) Set(name string, val Object) Object {
 	e.store[name] = val
 	return val
 }
 
-func (e *Environment) GetContext() *oto.Context {
-	return e.otoContext
-}
-
+// NewEnvironment creates a new environment instance
 func NewEnvironment() *Environment {
 	s := make(map[string]Object)
-	return &Environment{store: s, outer: nil, otoContext: otoContext}
+	return &Environment{store: s, outer: nil}
 }
 
+// NewEnclosedEnvironment creates an extended environment
 func NewEnclosedEnvironment(outer *Environment) *Environment {
 	env := NewEnvironment()
 	env.outer = outer
