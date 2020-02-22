@@ -11,7 +11,7 @@ type Lexer struct {
 }
 
 func (l *Lexer) skipWhitespace() {
-	for l.ch == ' ' || l.ch == '\t' {
+	for l.ch == ' ' {
 		l.readChar()
 	}
 }
@@ -92,6 +92,8 @@ func (l *Lexer) NextToken() token.Token {
 		}
 	case '\n':
 		tok = newToken(token.Newline, l.ch)
+	case '\t':
+		tok = newToken(token.Tab, l.ch)
 	case '(':
 		tok = newToken(token.LParen, l.ch)
 	case ')':
@@ -172,6 +174,8 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LBracket, l.ch)
 	case ']':
 		tok = newToken(token.RBracket, l.ch)
+	case ':':
+		tok = newToken(token.Colon, l.ch)
 	case '#':
 		tok.Literal = l.readComment()
 		tok.Type = token.Comment

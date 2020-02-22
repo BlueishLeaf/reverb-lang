@@ -31,23 +31,26 @@ const (
 	Index
 )
 
-var precedences = map[token.Type]int{
-	token.LParen:   Call,
-	token.Equal:    Equals,
-	token.NotEqual: Equals,
-	token.And:      Logical,
-	token.Or:       Logical,
-	token.LT:       LessGreater,
-	token.LTE:      LessGreater,
-	token.GT:       LessGreater,
-	token.GTE:      LessGreater,
-	token.Plus:     Sum,
-	token.Minus:    Sum,
-	token.Mod:      Product,
-	token.Slash:    Product,
-	token.Asterisk: Product,
-	token.LBracket: Index,
-}
+var (
+	precedences = map[token.Type]int{
+		token.LParen:   Call,
+		token.Equal:    Equals,
+		token.NotEqual: Equals,
+		token.And:      Logical,
+		token.Or:       Logical,
+		token.LT:       LessGreater,
+		token.LTE:      LessGreater,
+		token.GT:       LessGreater,
+		token.GTE:      LessGreater,
+		token.Plus:     Sum,
+		token.Minus:    Sum,
+		token.Mod:      Product,
+		token.Slash:    Product,
+		token.Asterisk: Product,
+		token.LBracket: Index,
+	}
+	tabCount = 0
+)
 
 type (
 	prefixParseFn func() ast.Expression
@@ -150,8 +153,7 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 	}
 	leftExp := prefix()
 
-	// Because an if expression's condition doesnt terminate, we try to pick up on 'then' here too
-	for (!p.peekTokenIs(token.Newline) || !p.peekTokenIs(token.EOF) || !p.peekTokenIs(token.Then)) && precedence < p.peekPrecedence() {
+	for (!p.peekTokenIs(token.Newline) || !p.peekTokenIs(token.EOF) || !p.peekTokenIs(token.Colon)) && precedence < p.peekPrecedence() {
 		infix := p.infixParseFns[p.peekToken.Type]
 		if infix == nil {
 			return leftExp
@@ -274,12 +276,24 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 	}
 	block.Statements = []ast.Statement{}
 	p.nextToken()
-	for !p.curTokenIs(token.End) && !p.curTokenIs(token.EOF) {
-		stmt := p.parseStatement()
-		if stmt != nil {
-			block.Statements = append(block.Statements, stmt)
-		}
+	if p.curTokenIs(token.Newline) {
+		tabCount++
 		p.nextToken()
+		for !p.curTokenIs(token.EOF) {
+			for i := 0; i < tabCount; i++ {
+				if !p.curTokenIs(token.Tab) {
+					tabCount--
+					return block
+				}
+				p.nextToken()
+			}
+			stmt := p.parseStatement()
+			if stmt != nil {
+				block.Statements = append(block.Statements, stmt)
+			}
+			// p.nextToken()
+		}
+		// tabCount--
 	}
 	return block
 }
@@ -288,18 +302,18 @@ func (p *Parser) parseIfExpression() ast.Expression {
 	expression := &ast.IfExpression{
 		Token: p.curToken,
 	}
-	if p.peekTokenIs(token.Then) {
+	if p.peekTokenIs(token.Colon) {
 		return nil
 	}
 	p.nextToken()
 	expression.Condition = p.parseExpression(Lowest)
-	if !p.expectPeek(token.Then) {
+	if !p.expectPeek(token.Colon) {
 		return nil
 	}
 	expression.Consequence = p.parseBlockStatement()
 	if p.peekTokenIs(token.Else) {
 		p.nextToken()
-		if !p.expectPeek(token.Then) {
+		if !p.expectPeek(token.Colon) {
 			return nil
 		}
 		expression.Alternative = p.parseBlockStatement()
@@ -342,7 +356,7 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 		return nil
 	}
 	lit.Parameters = p.parseFunctionParameters()
-	if !p.expectPeek(token.Begin) {
+	if !p.expectPeek(token.Colon) {
 		return nil
 	}
 	lit.Body = p.parseBlockStatement()
@@ -402,11 +416,15 @@ func (p *Parser) ParseProgram() *ast.Program {
 	program.Statements = []ast.Statement{}
 
 	for p.curToken.Type != token.EOF && p.curToken.Type != token.Comment {
-		stmt := p.parseStatement()
-		if stmt != nil {
-			program.Statements = append(program.Statements, stmt)
+		if p.curToken.Type == token.Newline || p.curToken.Type == token.Tab {
+			p.nextToken()
+		} else {
+			stmt := p.parseStatement()
+			if stmt != nil {
+				program.Statements = append(program.Statements, stmt)
+			}
+			p.nextToken()
 		}
-		p.nextToken()
 	}
 	return program
 }
@@ -418,6 +436,7 @@ func (p *Parser) Errors() []string {
 
 // New creates a new parser instance and registers the parser functions
 func New(l *lexer.Lexer) *Parser {
+	tabCount = 0
 	p := &Parser{
 		l:      l,
 		errors: []string{},

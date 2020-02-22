@@ -169,13 +169,32 @@ func TestEvalIfElseExpressions(t *testing.T) {
 		input    string
 		expected interface{}
 	}{
-		{"if true then 10 end", 10},
-		{"if false then 10 end", nil},
-		{"if 1 then 10 end", 10},
-		{"if 1 < 2 then 10 end", 10},
-		{"if 1 > 2 then 10 end", nil},
-		{"if 1 > 2 then 10 end else then 20 end", 20},
-		{"if 1 < 2 then 10 end else then 20 end", 10},
+		{`
+if true:
+	10`, 10,
+		},
+		{`
+if false:
+	10`, nil},
+		{`
+if 1:
+	10`, 10},
+		{`
+if 1 < 2:
+	10`, 10},
+		{`
+if 1 > 2:
+	10`, nil},
+		{`
+if 1 > 2:
+	10
+else:
+	20`, 20},
+		{`
+if 1 < 2:
+	10
+else:
+	20`, 10},
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
@@ -195,16 +214,13 @@ func TestEvalReturnStatements(t *testing.T) {
 	}{
 		{"return 10", 10},
 		{"return 2 * 5", 10},
-		{"if 10 > 1 then return 10 end", 10},
-		{
-			`if 10 > 1 then
-				  if 10 > 1 then # Just ignore me pls
-					return 10
-				  end
-				
-				  return 1
-				end`,
-			10},
+		{`if 10 > 1:
+	return 10`, 10},
+		{`
+if 10 > 1:
+	if true:
+		return 10
+return 1`, 10},
 	}
 
 	for _, tt := range tests {
@@ -235,7 +251,7 @@ func TestErrorHandling(t *testing.T) {
 			"unknown operator: BOOLEAN + BOOLEAN",
 		},
 		{
-			"if 10 > 1 then true + false end",
+			"if 10 > 1:\n\ttrue + false",
 			"unknown operator: BOOLEAN + BOOLEAN",
 		},
 		{
@@ -280,7 +296,7 @@ func TestEvalVarStatements(t *testing.T) {
 }
 
 func TestEvalFunctionObject(t *testing.T) {
-	input := "fn(x) begin x + 2 end"
+	input := "fn(x):\n\tx + 2"
 	evaluated := testEval(input)
 	fn, ok := evaluated.(*object.Function)
 	if !ok {
@@ -304,12 +320,12 @@ func TestFunctionApplication(t *testing.T) {
 		input    string
 		expected int64
 	}{
-		{"var identity = fn(x) begin x end\nidentity(5)", 5},
-		{"var identity = fn(x) begin return x end\nidentity(5)", 5},
-		{"var double = fn(x) begin x * 2 end\ndouble(5)", 10},
-		{"var add = fn(x, y) begin x + y end\nadd(5, 5)", 10},
-		{"var add = fn(x, y) begin x + y end\nadd(5 + 5, add(5, 5))", 20},
-		{"fn(x) begin x end (5)", 5},
+		{"var identity = fn(x):\n\tx\nidentity(5)", 5},
+		{"var identity = fn(x):\n\treturn x\nidentity(5)", 5},
+		{"var double = fn(x):\n\tx * 2\ndouble(5)", 10},
+		{"var add = fn(x, y):\n\tx + y\nadd(5, 5)", 10},
+		{"var add = fn(x, y):\n\tx + y\nadd(5 + 5, add(5, 5))", 20},
+		{"fn(x):\n\tx\n(5)", 5},
 	}
 	for _, tt := range tests {
 		testIntegerObject(t, testEval(tt.input), tt.expected)
@@ -317,19 +333,14 @@ func TestFunctionApplication(t *testing.T) {
 }
 
 func TestEnclosingEnvironments(t *testing.T) {
-	input := `var first = 10
-		var second = 10
-		var third = 10
-		
-		var ourFunction = fn(first) begin
-		  var second = 20
-		
-		  first + second + third
-		end
-		
-		ourFunction(20) + first + second`
-
-	testIntegerObject(t, testEval(input), 70)
+	input := `
+var first = 10
+var second = 10
+var third = 10
+var ourFunction = fn(first):
+	first + second + third
+ourFunction(20) + first + second`
+	testIntegerObject(t, testEval(input), 60)
 }
 
 func TestBuiltinFunctions(t *testing.T) {

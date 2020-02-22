@@ -7,42 +7,38 @@ import (
 )
 
 func TestNextToken(t *testing.T) {
-	input := `var five = 5.56
-		var ten = 10
-		var add = fn(x, y) begin
-			x + y
-		end
-		fn add(x, y) begin
-			return x + y
-		end
-		# This comment should be ignored
-		var result = add(five, ten) # This comment should also be ignored
-		!-/*5
-		5 < 10 > 5
-		if 5 < 10 then
-			return true
-		else if 5 == 1 then
-			return true
-		else
-			return false
-		end
-		10 == 10
-		10 != 9
-		[1, 2]
-		%
-		@
-		<=
-		>=
-		&&
-		||
-		&
-		|
-		=`
-
+	input := `
+var five = 5.56
+var ten = 10
+var add = fn(x, y):
+	x + y
+# This comment should be ignored
+var result = add(five, ten) # This comment should also be ignored
+!-/*5
+5 < 10 > 5
+if 5 < 10:
+	return true
+elif 5 == 1:
+	return true
+else:
+	return false
+10 == 10
+10 != 9
+[1, 2]
+%
+@
+<=
+>=
+&&
+||
+&
+|
+=`
 	tests := []struct {
 		expectedType    token.Type
 		expectedLiteral string
 	}{
+		{token.Newline, "\n"},
 		{token.Var, "var"},
 		{token.Ident, "five"},
 		{token.Assign, "="},
@@ -62,29 +58,12 @@ func TestNextToken(t *testing.T) {
 		{token.Comma, ","},
 		{token.Ident, "y"},
 		{token.RParen, ")"},
-		{token.Begin, "begin"},
+		{token.Colon, ":"},
 		{token.Newline, "\n"},
+		{token.Tab, "\t"},
 		{token.Ident, "x"},
 		{token.Plus, "+"},
 		{token.Ident, "y"},
-		{token.Newline, "\n"},
-		{token.End, "end"},
-		{token.Newline, "\n"},
-		{token.Function, "fn"},
-		{token.Ident, "add"},
-		{token.LParen, "("},
-		{token.Ident, "x"},
-		{token.Comma, ","},
-		{token.Ident, "y"},
-		{token.RParen, ")"},
-		{token.Begin, "begin"},
-		{token.Newline, "\n"},
-		{token.Return, "return"},
-		{token.Ident, "x"},
-		{token.Plus, "+"},
-		{token.Ident, "y"},
-		{token.Newline, "\n"},
-		{token.End, "end"},
 		{token.Newline, "\n"},
 		{token.Comment, "# This comment should be ignored"},
 		{token.Newline, "\n"},
@@ -115,27 +94,28 @@ func TestNextToken(t *testing.T) {
 		{token.Int, "5"},
 		{token.LT, "<"},
 		{token.Int, "10"},
-		{token.Then, "then"},
+		{token.Colon, ":"},
 		{token.Newline, "\n"},
+		{token.Tab, "\t"},
 		{token.Return, "return"},
 		{token.True, "true"},
 		{token.Newline, "\n"},
-		{token.Else, "else"},
-		{token.If, "if"},
+		{token.Elif, "elif"},
 		{token.Int, "5"},
 		{token.Equal, "=="},
 		{token.Int, "1"},
-		{token.Then, "then"},
+		{token.Colon, ":"},
 		{token.Newline, "\n"},
+		{token.Tab, "\t"},
 		{token.Return, "return"},
 		{token.True, "true"},
 		{token.Newline, "\n"},
 		{token.Else, "else"},
+		{token.Colon, ":"},
 		{token.Newline, "\n"},
+		{token.Tab, "\t"},
 		{token.Return, "return"},
 		{token.False, "false"},
-		{token.Newline, "\n"},
-		{token.End, "end"},
 		{token.Newline, "\n"},
 		{token.Int, "10"},
 		{token.Equal, "=="},

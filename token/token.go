@@ -43,8 +43,10 @@ const (
 	And = "&&"
 	// Or represents the or operator
 	Or = "||"
-	// Newline represents the newline delimiter
+	// Newline represents the newline character
 	Newline = "\n"
+	// Tab represents the tab character
+	Tab = "\t"
 	// Comma represents the comma delimiter
 	Comma = ","
 	// LParen represents the left parenthesis
@@ -55,12 +57,8 @@ const (
 	LBracket = "["
 	// RBracket represents the right bracket
 	RBracket = "]"
-	// Begin represents the beginning of a function block
-	Begin = "BEGIN"
-	// Then represents the beginning of an If block
-	Then = "THEN"
-	// End represents the end of a code block
-	End = "END"
+	// Colon represents the beginning of a code block
+	Colon = ":"
 	// Function represents a function
 	Function = "FUNCTION"
 	// Var represents a user-defined variable
@@ -73,6 +71,8 @@ const (
 	If = "IF"
 	// Else represents the alternative consequence of a conditional statement
 	Else = "ELSE"
+	// Elif represents an else-if statement
+	Elif = "ELIF"
 	// Return represents the return keyword
 	Return = "RETURN"
 )
@@ -90,14 +90,12 @@ type Token struct {
 // returns the corresponding token
 func LookupKeyword(keyword string) Type {
 	var keywords = map[string]Type{
-		"begin":  Begin,
-		"end":    End,
 		"fn":     Function,
 		"var":    Var,
 		"true":   True,
 		"false":  False,
 		"if":     If,
-		"then":   Then,
+		"elif":   Elif,
 		"else":   Else,
 		"return": Return,
 	}
