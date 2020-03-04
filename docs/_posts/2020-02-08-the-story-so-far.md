@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "The Story So Far"
 date:   2020-02-08 00:20:23 +0000
 categories: jekyll update

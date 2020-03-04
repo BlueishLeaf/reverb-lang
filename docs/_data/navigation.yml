@@ -1,0 +1,12 @@
+main:
+  - title: "About"
+    url: /about/
+  - title: "Documentation"
+    url: /docs/quick-start-guide/
+  - title: "GitHub"
+    url: https://github.com/BlueishLeaf/reverb-lang
+docs:
+  - title: Getting Started
+    children:
+      - title: "Quick-Start Guide"
+        url: /docs/quick-start-guide/
