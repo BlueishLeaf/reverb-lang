@@ -5,9 +5,10 @@ description: An functional programming language with a twist.
 url: "https://blueishleaf.github.io"
 baseurl: "/reverb-lang"
 repository: BlueishLeaf/reverb-lang
-theme: minimal-mistakes-jekyll
+remote_theme: "mmistakes/minimal-mistakes@4.18.1"
 plugins:
   - jekyll-feed
+  - jekyll-include-cache
 minimal_mistakes_skin: "neon"
 author:
   name: "Killian Kelly"
