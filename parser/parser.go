@@ -358,6 +358,13 @@ func (p *Parser) parseCallExpression(function ast.Expression) ast.Expression {
 	return exp
 }
 
+// TODO: Bit of a hack. Think of better solution later
+func (p *Parser) skipWhitespace() {
+	for p.curTokenIs(token.Newline) {
+		p.nextToken()
+	}
+}
+
 func (p *Parser) parseExpressionList(end token.Type) []ast.Expression {
 	var list []ast.Expression
 	if p.peekTokenIs(end) {
@@ -365,10 +372,13 @@ func (p *Parser) parseExpressionList(end token.Type) []ast.Expression {
 		return list
 	}
 	p.nextToken()
+	p.skipWhitespace()
 	list = append(list, p.parseExpression(Lowest))
 	for p.peekTokenIs(token.Comma) {
 		p.nextToken()
+		p.skipWhitespace()
 		p.nextToken()
+		p.skipWhitespace()
 		list = append(list, p.parseExpression(Lowest))
 	}
 	if !p.expectPeek(end) {

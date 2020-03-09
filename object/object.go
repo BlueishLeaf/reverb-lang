@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/BlueishLeaf/reverb-lang/ast"
+	"github.com/padster/go-sound/sounds"
 )
 
 // Type represents the type of an object
@@ -21,6 +22,8 @@ const (
 	FloatObj = "FLOAT"
 	// BooleanObj represents boolean objects
 	BooleanObj = "BOOLEAN"
+	// SoundObj represents a Reverb sound abstraction object
+	SoundObj = "SOUND"
 	// NullObj represents the concept of null
 	NullObj = "NULL"
 	// ReturnValueObj represents a value returned from a function
@@ -31,8 +34,6 @@ const (
 	FunctionObj = "FUNCTION"
 	// BuiltinObj represents a Reverb function object
 	BuiltinObj = "BUILTIN"
-	// SynthesisObj represents a Reverb synthesis function object
-	SynthesisObj = "SYNTHESIS"
 	// ArrayObj represents an array object
 	ArrayObj = "ARRAY"
 )
@@ -86,6 +87,21 @@ func (b *Boolean) Type() Type {
 // Inspect returns the string value of the boolean object
 func (b *Boolean) Inspect() string {
 	return fmt.Sprintf("%t", b.Value)
+}
+
+// Sound represents an abstraction of the go-sounds Sound interface for Reverb
+type Sound struct {
+	Value sounds.Sound
+}
+
+// Type returns the sound object type
+func (s *Sound) Type() Type {
+	return SoundObj
+}
+
+// Inspect returns the string value of the sound object
+func (s *Sound) Inspect() string {
+	return fmt.Sprintf("%d", s.Value.Length())
 }
 
 // Null represents the null data type
