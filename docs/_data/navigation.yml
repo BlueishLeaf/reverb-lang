@@ -1,12 +1,17 @@
 main:
-  - title: "About"
+  - title: About
     url: /about/
-  - title: "Documentation"
+  - title: Documentation
     url: /docs/quick-start-guide/
-  - title: "GitHub"
+  - title: GitHub
     url: https://github.com/BlueishLeaf/reverb-lang
 docs:
+  - title: The Reverb Language Specification
   - title: Getting Started
     children:
-      - title: "Quick-Start Guide"
+      - title: Installation Guide
         url: /docs/quick-start-guide/
+      - title: The 'Hello World' of Reverb
+        url: /docs/quick-start-guide/
+      - title: Quick Code Examples
+        url: /docs/quick-code-examples/
