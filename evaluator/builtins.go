@@ -2,9 +2,10 @@ package evaluator
 
 import (
 	"fmt"
-	"github.com/padster/go-sound/output"
-	"github.com/padster/go-sound/sounds"
-	"github.com/padster/go-sound/util"
+
+	"github.com/BlueishLeaf/go-sound/output"
+	"github.com/BlueishLeaf/go-sound/sounds"
+	"github.com/BlueishLeaf/go-sound/utilities"
 
 	"github.com/BlueishLeaf/reverb-lang/object"
 )
@@ -164,7 +165,7 @@ var builtins = map[string]*object.Builtin{
 			return newError("argument to `midiToHz` must be INTEGER, got %s", args[0].Type())
 		}
 		midi := args[0].(*object.Integer)
-		return &object.Float{Value: util.MidiToHz(int(midi.Value))}
+		return &object.Float{Value: utilities.MidiToHz(int(midi.Value))}
 	}},
 	"concatinate": {Fn: func(args ...object.Object) object.Object {
 		if len(args) == 1 {

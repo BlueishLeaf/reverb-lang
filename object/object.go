@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/BlueishLeaf/go-sound/sounds"
 	"github.com/BlueishLeaf/reverb-lang/ast"
-	"github.com/padster/go-sound/sounds"
 )
 
 // Type represents the type of an object
@@ -114,7 +114,7 @@ func (n *Null) Type() Type {
 
 // Inspect returns the string value of the null object
 func (n *Null) Inspect() string {
-	return "null"
+	return ""
 }
 
 // ReturnValue represents the return value object
