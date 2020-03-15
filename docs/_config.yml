@@ -1,14 +1,15 @@
 title: Reverb
-subtitle: A functional programming language with a twist.
+subtitle: Creative expression through functional programming.
 name: Killian Kelly
-description: A functional programming language with a twist.
+description: Creative expression through functional programming.
 url: "https://blueishleaf.github.io"
 baseurl: "/reverb-lang"
 repository: BlueishLeaf/reverb-lang
-remote_theme: "mmistakes/minimal-mistakes@4.18.1"
+remote_theme: "mmistakes/minimal-mistakes@4.19.0"
 plugins:
   - jekyll-feed
   - jekyll-include-cache
+  - jemoji
 minimal_mistakes_skin: "neon"
 author:
   name: "Killian Kelly"
@@ -32,14 +33,7 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: true
-      read_time: true
-  # _pages
-  - scope:
-      path: "_pages"
-      type: pages
-    values:
-      layout: single
+      categories: jekyll update
       author_profile: true
   # _docs
   - scope:

@@ -1,17 +1,39 @@
 main:
   - title: About
     url: /about/
+  - title: Blog
+    url: /blog/
   - title: Documentation
-    url: /docs/quick-start-guide/
+    url: /docs/getting-started/installation/
   - title: GitHub
     url: https://github.com/BlueishLeaf/reverb-lang
 docs:
-  - title: The Reverb Language Specification
   - title: Getting Started
     children:
-      - title: Installation Guide
-        url: /docs/quick-start-guide/
-      - title: The 'Hello World' of Reverb
-        url: /docs/quick-start-guide/
-      - title: Quick Code Examples
-        url: /docs/quick-code-examples/
+      - title: Installation
+        url: /docs/getting-started/installation/
+      - title: The Reverb CLI
+        url: /docs/getting-started/the-reverb-cli/
+      - title: Basic Reverb Programming
+        url: /docs/getting-started/basic-reverb-programming/
+      - title: Functional Programming Concepts
+        url: /docs/getting-started/functional-programming-concepts/
+      - title: The Reverb Synth
+        url: /docs/getting-started/the-reverb-synth/
+      - title: Code Examples
+        url: /docs/getting-started/code-examples/
+  - title: Language Specification
+    children:
+      - title: Introduction
+        url: /docs/language-specification/introduction/
+      - title: Lexical Analysis
+        url: /docs/language-specification/lexical-analysis/
+      - title: Data Model
+        url: /docs/language-specification/data-model/
+      - title: Execution Model
+        url: /docs/language-specification/execution-model/
+      - title: Expressions
+        url: /docs/language-specification/expressions/
+      - title: Statements
+        url: /docs/language-specification/statements/
+      
