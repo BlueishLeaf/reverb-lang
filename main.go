@@ -3,15 +3,16 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
+	"log"
+	"os"
+	"strings"
+
 	"github.com/BlueishLeaf/reverb-lang/evaluator"
 	"github.com/BlueishLeaf/reverb-lang/lexer"
 	"github.com/BlueishLeaf/reverb-lang/object"
 	"github.com/BlueishLeaf/reverb-lang/parser"
 	"github.com/BlueishLeaf/reverb-lang/repl"
-	"io"
-	"log"
-	"os"
-	"strings"
 )
 
 func main() {
@@ -38,7 +39,7 @@ func main() {
 			_, _ = io.WriteString(os.Stdout, "\n")
 		}
 	} else {
-		fmt.Printf("Welcome to the Reverb REPL. Press Ctrl + D to exit.\n")
+		fmt.Printf("Welcome to the Reverb REPL. Press Ctrl + C to exit.\n")
 		repl.Start(os.Stdin, os.Stdout)
 	}
 }

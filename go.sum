@@ -1,3 +1,2 @@
-github.com/BlueishLeaf/go-sound v0.0.0-20200313143350-361dd1115e91 h1:UoVCKTYva4LXv2fgLNTZBYQ4Zvo67/EiajGxEr5uPnY=
-github.com/BlueishLeaf/go-sound v0.0.0-20200313143350-361dd1115e91/go.mod h1:FrUuphEkMwJwPIsS5HPJoO0cqLkb61PxiXTXMSt8J0Y=
-github.com/xthexder/go-jack v0.0.0-20180616204541-62cc22fa20b6/go.mod h1:0UTXja5DHE3Z5tqm0WxYwpsclGdma/82Vw1JszrfzOE=
+github.com/BlueishLeaf/go-sound v1.0.0 h1:RQhhc7gGMQfFaHeLkEO/aIydK4xwZkbMu3tIrNh3lgU=
+github.com/BlueishLeaf/go-sound v1.0.0/go.mod h1:bvTFbGvWwhB8nkjViLGdQGa/X3xp69NoFoScpZl9sTc=
