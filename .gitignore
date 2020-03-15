@@ -5,6 +5,7 @@
 *.so
 *.dylib
 reverb-lang
+reverb
 
 # Test binary, build with `go test -c`
 *.test
