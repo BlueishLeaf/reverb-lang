@@ -31,6 +31,17 @@ func (l *Lexer) readComment() string {
 	return l.input[position:l.position]
 }
 
+func (l *Lexer) readString() string {
+	position := l.position + 1
+	for {
+		l.readChar()
+		if l.ch == '"' {
+			break
+		}
+	}
+	return l.input[position:l.position]
+}
+
 func (l *Lexer) readNumber() string {
 	position := l.position
 	for isDigit(l.ch) {
@@ -176,6 +187,9 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Literal = l.readComment()
 		tok.Type = token.Comment
 		return tok
+	case '"':
+		tok.Type = token.String
+		tok.Literal = l.readString()
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF

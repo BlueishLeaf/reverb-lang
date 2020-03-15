@@ -130,6 +130,23 @@ func (es *ExpressionStatement) String() string {
 	return ""
 }
 
+// StringLiteral represents a string literal on the AST
+type StringLiteral struct {
+	Token token.Token
+	Value string
+}
+
+func (sl *StringLiteral) expressionNode() {}
+
+// TokenLiteral returns the integer literal's token literal
+func (sl *StringLiteral) TokenLiteral() string {
+	return sl.Token.Literal
+}
+
+func (sl *StringLiteral) String() string {
+	return sl.Token.Literal
+}
+
 // IntegerLiteral represents an integer literal on the AST
 type IntegerLiteral struct {
 	Token token.Token

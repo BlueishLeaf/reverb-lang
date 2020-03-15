@@ -406,6 +406,13 @@ func (p *Parser) parseIndexExpression(left ast.Expression) ast.Expression {
 	return exp
 }
 
+func (p *Parser) parseStringLiteral() ast.Expression {
+	return &ast.StringLiteral{
+		Token: p.curToken,
+		Value: p.curToken.Literal,
+	}
+}
+
 // ParseProgram runs through all thr tokens and parses them as statements or expressions
 func (p *Parser) ParseProgram() *ast.Program {
 	program := &ast.Program{}
@@ -447,6 +454,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.If, p.parseIfExpression)
 	p.registerPrefix(token.Function, p.parseFunctionLiteral)
 	p.registerPrefix(token.LBracket, p.parseArrayLiteral)
+	p.registerPrefix(token.String, p.parseStringLiteral)
 
 	p.infixParseFns = make(map[token.Type]infixParseFn)
 	p.registerInfix(token.Plus, p.parseInfixExpression)

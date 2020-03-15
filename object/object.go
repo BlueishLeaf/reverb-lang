@@ -16,6 +16,8 @@ type Type string
 type BuiltinFunction func(args ...Object) Object
 
 const (
+	// StringObj represents string objects
+	StringObj = "STRING"
 	// IntegerObj represents integer objects
 	IntegerObj = "INTEGER"
 	// FloatObj represents floating point objects
@@ -42,6 +44,21 @@ const (
 type Object interface {
 	Type() Type
 	Inspect() string
+}
+
+// String represents the string data type
+type String struct {
+	Value string
+}
+
+// Type returns the string object type
+func (s *String) Type() Type {
+	return StringObj
+}
+
+// Inspect returns the string value of the integer object
+func (s *String) Inspect() string {
+	return s.Value
 }
 
 // Integer represents the integer data type

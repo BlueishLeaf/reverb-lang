@@ -37,7 +37,8 @@ func TestNextToken(t *testing.T) {
 		||
 		&
 		|
-		=`
+		=
+		"foobar"`
 
 	tests := []struct {
 		expectedType    token.Type
@@ -168,6 +169,8 @@ func TestNextToken(t *testing.T) {
 		{token.Illegal, "|"},
 		{token.Newline, "\n"},
 		{token.Assign, "="},
+		{token.Newline, "\n"},
+		{token.String, "foobar"},
 		{token.EOF, ""},
 	}
 

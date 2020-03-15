@@ -36,4 +36,6 @@ docs:
         url: /docs/language-specification/expressions/
       - title: Statements
         url: /docs/language-specification/statements/
+      - title: Full Grammar Specification
+        url: /docs/language-specification/full-grammar-specification/
       

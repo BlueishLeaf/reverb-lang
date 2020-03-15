@@ -13,6 +13,8 @@ const (
 	Int = "INT"
 	// Float represents a float literal
 	Float = "FLOAT"
+	// String represents a string literal
+	String = "STRING"
 	// Assign represents the assignment operator
 	Assign = "="
 	// Plus represents the plus operator
