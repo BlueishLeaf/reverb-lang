@@ -2,6 +2,7 @@ package evaluator
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/BlueishLeaf/go-sound/output"
 	"github.com/BlueishLeaf/go-sound/sounds"
@@ -30,6 +31,25 @@ var builtins = map[string]*object.Builtin{
 				fmt.Println(arg.Inspect())
 			}
 			return Null
+		},
+	},
+	"get": {
+		Fn: func(args ...object.Object) object.Object {
+			var input string
+			fmt.Scan(&input)
+			bool, err := strconv.ParseBool(input)
+			if err == nil {
+				return &object.Boolean{Value: bool}
+			}
+			float, err := strconv.ParseFloat(input, 64)
+			if err == nil {
+				return &object.Float{Value: float}
+			}
+			integer, err := strconv.ParseInt(input, 10, 64)
+			if err == nil {
+				return &object.Integer{Value: integer}
+			}
+			return &object.String{Value: input}
 		},
 	},
 	"head": {Fn: func(args ...object.Object) object.Object {

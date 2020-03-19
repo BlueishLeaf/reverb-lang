@@ -7,7 +7,7 @@ header:
   overlay_color: "#18020a"
   actions:
     - label: "<i class='fas fa-download'></i> Install now"
-      url: "/docs/installation-guide/"
+      url: "/docs/getting-started/installation/"
 excerpt: >
   A functional programming language with a twist.<br />
   <small><a href="https://github.com/BlueishLeaf/reverb-lang/releases/tag/v1.0.0" target="_blank">Latest release v1.0.0</a></small>
