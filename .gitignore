@@ -10,6 +10,9 @@ reverb
 # Test binary, build with `go test -c`
 *.test
 
+# Test File
+test.rev
+
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
