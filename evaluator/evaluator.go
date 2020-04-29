@@ -387,6 +387,10 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if isError(val) {
 			return val
 		}
+		_, found := env.Get(node.Name.Value)
+		if found {
+			return &object.Error{Message: "Duplicate definition for value " + node.Name.Value}
+		}
 		env.Set(node.Name.Value, val)
 	case *ast.Identifier:
 		return evalIdentifier(node, env)
